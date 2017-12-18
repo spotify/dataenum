@@ -17,15 +17,10 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
-
-
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -35,7 +30,7 @@ public abstract class RecursiveValue {
   }
 
   public static RecursiveValue value(@Nonnull RecursiveValue child) {
-    return new Value(child);
+    return Value.create(child);
   }
 
   public final boolean isValue() {
@@ -50,39 +45,17 @@ public abstract class RecursiveValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends RecursiveValue {
-    private final RecursiveValue child;
+  @AutoValue
+  public abstract static class Value extends RecursiveValue {
+    Value() {
+    }
 
-    private Value(RecursiveValue child) {
-      this.child = checkNotNull(child);
+    private static Value create(RecursiveValue child) {
+      return new AutoValue_RecursiveValue_Value(child);
     }
 
     @Nonnull
-    public final RecursiveValue child() {
-      return child;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Value)) return false;
-      Value o = (Value) other;
-      return o.child.equals(this.child);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + child.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Value{child=").append(child);
-      return builder.append('}').toString();
-    }
+    public abstract RecursiveValue child();
 
     @Override
     public final void match(@Nonnull Consumer<Value> value) {

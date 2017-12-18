@@ -17,14 +17,10 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
-
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 import just.some.pkg.InPackage;
@@ -35,7 +31,7 @@ public abstract class ReferencesOther {
   }
 
   public static ReferencesOther another(@Nonnull InPackage other) {
-    return new Another(other);
+    return Another.create(other);
   }
 
   public final boolean isAnother() {
@@ -50,39 +46,17 @@ public abstract class ReferencesOther {
 
   public abstract <R_> R_ map(@Nonnull Function<Another, R_> another);
 
-  public static final class Another extends ReferencesOther {
-    private final InPackage other;
+  @AutoValue
+  public abstract static class Another extends ReferencesOther {
+    Another() {
+    }
 
-    private Another(InPackage other) {
-      this.other = checkNotNull(other);
+    private static Another create(InPackage other) {
+      return new AutoValue_ReferencesOther_Another(other);
     }
 
     @Nonnull
-    public final InPackage other() {
-      return other;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Another)) return false;
-      Another o = (Another) other;
-      return o.other.equals(this.other);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + other.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Another{other=").append(other);
-      return builder.append('}').toString();
-    }
+    public abstract InPackage other();
 
     @Override
     public final void match(@Nonnull Consumer<Another> another) {

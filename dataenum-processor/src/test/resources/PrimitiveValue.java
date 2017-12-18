@@ -17,16 +17,10 @@
  * limitations under the License.
  * -/-/-
  */
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Boolean;
-import java.lang.Double;
-import java.lang.Float;
-import java.lang.Integer;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -36,7 +30,7 @@ public abstract class PrimitiveValue {
   }
 
   public static PrimitiveValue value(int param1, boolean param2, float param3, double param4) {
-    return new Value(param1, param2, param3, param4);
+    return Value.create(param1, param2, param3, param4);
   }
 
   public final boolean isValue() {
@@ -51,68 +45,22 @@ public abstract class PrimitiveValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends PrimitiveValue {
-    private final int param1;
-
-    private final boolean param2;
-
-    private final float param3;
-
-    private final double param4;
-
-    private Value(int param1, boolean param2, float param3, double param4) {
-      this.param1 = param1;
-      this.param2 = param2;
-      this.param3 = param3;
-      this.param4 = param4;
+  @AutoValue
+  public abstract static class Value extends PrimitiveValue {
+    Value() {
     }
 
-    public final int param1() {
-      return param1;
+    private static Value create(int param1, boolean param2, float param3, double param4) {
+      return new AutoValue_PrimitiveValue_Value(param1, param2, param3, param4);
     }
 
-    public final boolean param2() {
-      return param2;
-    }
+    public abstract int param1();
 
-    public final float param3() {
-      return param3;
-    }
+    public abstract boolean param2();
 
-    public final double param4() {
-      return param4;
-    }
+    public abstract float param3();
 
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Value)) return false;
-      Value o = (Value) other;
-      return o.param1 == param1
-          && o.param2 == param2
-          && o.param3 == param3
-          && o.param4 == param4;
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      result = result * 31 + Float.valueOf(param3).hashCode();
-      result = result * 31 + Double.valueOf(param4).hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Value{param1=").append(param1);
-      builder.append(", param2=").append(param2);
-      builder.append(", param3=").append(param3);
-      builder.append(", param4=").append(param4);
-      return builder.append('}').toString();
-    }
+    public abstract double param4();
 
     @Override
     public final void match(@Nonnull Consumer<Value> value) {

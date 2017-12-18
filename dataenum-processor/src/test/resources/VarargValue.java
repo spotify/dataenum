@@ -17,14 +17,11 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
-
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
+import java.lang.SuppressWarnings;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -34,7 +31,7 @@ public abstract class VarargValue {
   }
 
   public static VarargValue value(@Nonnull int... values) {
-    return new Value(values);
+    return Value.create(values);
   }
 
   public final boolean isValue() {
@@ -49,39 +46,18 @@ public abstract class VarargValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends VarargValue {
-    private final int[] values;
-
-    private Value(int[] values) {
-      this.values = checkNotNull(values);
+  @AutoValue
+  public abstract static class Value extends VarargValue {
+    Value() {
     }
 
+    private static Value create(int[] values) {
+      return new AutoValue_VarargValue_Value(values);
+    }
+
+    @SuppressWarnings("mutable")
     @Nonnull
-    public final int[] values() {
-      return values;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Value)) return false;
-      Value o = (Value) other;
-      return o.values.equals(this.values);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + values.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Value{values=").append(values);
-      return builder.append('}').toString();
-    }
+    public abstract int[] values();
 
     @Override
     public final void match(@Nonnull Consumer<Value> value) {

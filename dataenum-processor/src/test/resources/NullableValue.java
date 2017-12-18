@@ -17,15 +17,11 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
-import static com.spotify.dataenum.DataenumUtils.equal;
-
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
 import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +32,8 @@ public abstract class NullableValue {
   }
 
   public static NullableValue value(@Nonnull Object param1, @Nullable Object param2,
-      @Nullable Object param3, @Nonnull Object param4, @Nonnull Object param5) {
-    return new Value(param1, param2, param3, param4, param5);
+                                    @Nullable Object param3, @Nonnull Object param4, @Nonnull Object param5) {
+    return Value.create(param1, param2, param3, param4, param5);
   }
 
   public final boolean isValue() {
@@ -52,83 +48,30 @@ public abstract class NullableValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends NullableValue {
-    private final Object param1;
+  @AutoValue
+  public abstract static class Value extends NullableValue {
+    Value() {
+    }
 
-    private final Object param2;
-
-    private final Object param3;
-
-    private final Object param4;
-
-    private final Object param5;
-
-    private Value(Object param1, Object param2, Object param3, Object param4, Object param5) {
-      this.param1 = checkNotNull(param1);
-      this.param2 = param2;
-      this.param3 = param3;
-      this.param4 = checkNotNull(param4);
-      this.param5 = checkNotNull(param5);
+    private static Value create(Object param1, Object param2, Object param3, Object param4,
+                                Object param5) {
+      return new AutoValue_NullableValue_Value(param1, param2, param3, param4, param5);
     }
 
     @Nonnull
-    public final Object param1() {
-      return param1;
-    }
+    public abstract Object param1();
 
     @Nullable
-    public final Object param2() {
-      return param2;
-    }
+    public abstract Object param2();
 
     @Nullable
-    public final Object param3() {
-      return param3;
-    }
+    public abstract Object param3();
 
     @Nonnull
-    public final Object param4() {
-      return param4;
-    }
+    public abstract Object param4();
 
     @Nonnull
-    public final Object param5() {
-      return param5;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Value)) return false;
-      Value o = (Value) other;
-      return o.param1.equals(this.param1)
-          && equal(o.param2, this.param2)
-          && equal(o.param3, this.param3)
-          && o.param4.equals(this.param4)
-          && o.param5.equals(this.param5);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + param1.hashCode();
-      result = result * 31 + (param2 != null ? param2.hashCode() : 0);
-      result = result * 31 + (param3 != null ? param3.hashCode() : 0);
-      result = result * 31 + param4.hashCode();
-      result = result * 31 + param5.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Value{param1=").append(param1);
-      builder.append(", param2=").append(param2);
-      builder.append(", param3=").append(param3);
-      builder.append(", param4=").append(param4);
-      builder.append(", param5=").append(param5);
-      return builder.append('}').toString();
-    }
+    public abstract Object param5();
 
     @Override
     public final void match(@Nonnull Consumer<Value> value) {

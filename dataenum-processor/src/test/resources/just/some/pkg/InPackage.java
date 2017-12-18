@@ -19,14 +19,10 @@
  */
 package just.some.pkg;
 
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Boolean;
-import java.lang.Integer;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -36,7 +32,7 @@ public abstract class InPackage {
   }
 
   public static InPackage value1(int param1, boolean param2) {
-    return new Value1(param1, param2);
+    return Value1.create(param1, param2);
   }
 
   public final boolean isValue1() {
@@ -51,48 +47,18 @@ public abstract class InPackage {
 
   public abstract <R_> R_ map(@Nonnull Function<Value1, R_> value1);
 
-  public static final class Value1 extends InPackage {
-    private final int param1;
-
-    private final boolean param2;
-
-    private Value1(int param1, boolean param2) {
-      this.param1 = param1;
-      this.param2 = param2;
+  @AutoValue
+  public abstract static class Value1 extends InPackage {
+    Value1() {
     }
 
-    public final int param1() {
-      return param1;
+    private static Value1 create(int param1, boolean param2) {
+      return new AutoValue_InPackage_Value1(param1, param2);
     }
 
-    public final boolean param2() {
-      return param2;
-    }
+    public abstract int param1();
 
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Value1)) return false;
-      Value1 o = (Value1) other;
-      return o.param1 == param1
-          && o.param2 == param2;
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Value1{param1=").append(param1);
-      builder.append(", param2=").append(param2);
-      return builder.append('}').toString();
-    }
+    public abstract boolean param2();
 
     @Override
     public final void match(@Nonnull Consumer<Value1> value1) {
