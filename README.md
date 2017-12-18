@@ -199,7 +199,7 @@ int passwordLength = message.map(
 if (message.isLogin()) {
   return handleLogin(message.asLogin()); // Technically just a cast but easier to read than manual casting.
 } else {
-  Cases.illegal("only login is allowed");
+  throw new IllegalStateException("only login is allowed");
 }
 ```
 
