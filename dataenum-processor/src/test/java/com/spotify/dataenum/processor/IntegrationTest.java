@@ -97,6 +97,9 @@ public class IntegrationTest {
     assertThatEnumGeneratedMatchingFile("VarargValue");
   }
 
+  @Ignore(
+      "This test is unsound since it encourages creating generic arrays, which can cause "
+          + "severe runtime problems (e.g. ClassCastExceptions).")
   @Test
   public void genericVarargValueEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("GenericVarargValue");
