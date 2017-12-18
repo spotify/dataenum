@@ -61,7 +61,7 @@ There are many compelling use-cases for using an algebraic data type to represen
 - **Representing states of a state machine**. This allows you to only keep the data that actually is available in each
   state, making it impossible to even reference data that isn't available in a particular state.
 
-- **Rich, type safe error handling** Instead of having just an error code as a result of a network request, you can
+- **Rich, type-safe error handling** Instead of having just an error code as a result of a network request, you can
   have different types for different errors, each with relevant information attached: `ConnectivityLost`,
   `NoRouteToHost(String host)`, `TooManyRetries(int retryCount)`.
 
@@ -138,7 +138,9 @@ Some things to note:
   it easier to filter out from artifacts and exclude from static analysis.
 
 - The methods in the interface have to return a `dataenum_case`. Each method corresponds to one of the
-  possible cases of the enum, and the parameters of the method becomes the parameters of that case.
+  possible cases of the enum, and the parameters of the method becomes the parameters of that case. Note
+  that the method names from the interface will be used as class names for the cases, so you'll want to
+  name them using CamelCase as in the example above.
 
 - The prefix of the `@DataEnum` annotated interface will be used as the name of a generated super-class
   (`MyMessages` in the example above). This class will have factory methods for all the cases.
