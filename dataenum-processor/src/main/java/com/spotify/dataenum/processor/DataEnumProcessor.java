@@ -20,11 +20,8 @@
 package com.spotify.dataenum.processor;
 
 import com.spotify.dataenum.DataEnum;
-import com.spotify.dataenum.DataenumUtils;
 import com.spotify.dataenum.processor.data.OutputSpec;
-import com.spotify.dataenum.processor.data.Parameter;
 import com.spotify.dataenum.processor.data.Spec;
-import com.spotify.dataenum.processor.data.Value;
 import com.spotify.dataenum.processor.generator.data.OutputSpecFactory;
 import com.spotify.dataenum.processor.generator.spec.SpecTypeFactory;
 import com.spotify.dataenum.processor.parser.ParserException;
@@ -63,12 +60,6 @@ public class DataEnumProcessor extends AbstractProcessor {
 
         JavaFile.Builder javaFileBuilder =
             JavaFile.builder(outputSpec.outputClass().packageName(), outputTypeSpec);
-        if (needsCheckNotNull(spec)) {
-          javaFileBuilder.addStaticImport(DataenumUtils.class, "checkNotNull");
-        }
-        if (needsNullSafeEquals(spec)) {
-          javaFileBuilder.addStaticImport(DataenumUtils.class, "equal");
-        }
 
         JavaFile javaFile = javaFileBuilder.build();
         javaFile.writeTo(filer);
@@ -89,27 +80,5 @@ public class DataEnumProcessor extends AbstractProcessor {
   @Override
   public Set<String> getSupportedAnnotationTypes() {
     return Collections.singleton(DataEnum.class.getCanonicalName());
-  }
-
-  private static boolean needsCheckNotNull(Spec enumDef) {
-    for (Value value : enumDef.values()) {
-      for (Parameter parameter : value.parameters()) {
-        if (!parameter.type().isPrimitive() && !parameter.canBeNull()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private static boolean needsNullSafeEquals(Spec enumDef) {
-    for (Value value : enumDef.values()) {
-      for (Parameter parameter : value.parameters()) {
-        if (!parameter.type().isPrimitive() && parameter.canBeNull()) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 }

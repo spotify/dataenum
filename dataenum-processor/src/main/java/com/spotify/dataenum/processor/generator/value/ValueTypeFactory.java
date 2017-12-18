@@ -19,6 +19,7 @@
  */
 package com.spotify.dataenum.processor.generator.value;
 
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
 import com.spotify.dataenum.processor.data.Parameter;
@@ -26,7 +27,8 @@ import com.spotify.dataenum.processor.generator.match.MapMethods;
 import com.spotify.dataenum.processor.generator.match.MatchMethods;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.spotify.dataenum.processor.util.Iterables;
-import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
@@ -50,16 +52,14 @@ public class ValueTypeFactory {
         TypeSpec.classBuilder(value.outputClass())
             .addTypeVariables(value.typeVariables())
             .superclass(getSuperclassForValue(value, spec))
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.ABSTRACT);
 
-    typeBuilder.addMethod(createConstructor(value));
-    typeBuilder.addFields(createFields(value));
+    typeBuilder.addMethod(createConstructor());
+    typeBuilder.addAnnotation(AutoValue.class);
+    typeBuilder.addMethod(createFactoryMethod(value));
+
     typeBuilder.addMethods(createGetters(value));
-    typeBuilder.addMethod(createEquals(value));
 
-    typeBuilder.addMethod(createHashCode(value));
-
-    typeBuilder.addMethod(createToString(value));
     typeBuilder.addMethod(matchMethods.createFoldVoidMethod(value));
     typeBuilder.addMethod(mapMethods.createFoldMethod(value));
 
@@ -95,26 +95,40 @@ public class ValueTypeFactory {
         spec.outputClass(), superParameters.toArray(new TypeName[] {}));
   }
 
-  private static MethodSpec createConstructor(OutputValue value) {
-    MethodSpec.Builder constructor = MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE);
-    for (Parameter parameter : value.parameters()) {
-      constructor.addParameter(parameter.type(), parameter.name());
-
-      if (parameter.type().isPrimitive() || parameter.canBeNull()) {
-        constructor.addStatement("this.$1L = $1L", parameter.name());
-      } else {
-        constructor.addStatement("this.$1L = checkNotNull($1L)", parameter.name());
-      }
-    }
-    return constructor.build();
+  private static MethodSpec createConstructor() {
+    // Note: the constructor will have a default access of package-private which is intentional
+    return MethodSpec.constructorBuilder().build();
   }
 
-  private static Iterable<FieldSpec> createFields(OutputValue value) {
-    List<FieldSpec> fields = new ArrayList<>();
-    for (Parameter parameter : value.parameters()) {
-      fields.add(createField(parameter));
+  private static MethodSpec createFactoryMethod(OutputValue value) {
+    MethodSpec.Builder factoryMethod = MethodSpec.methodBuilder("create");
+
+    factoryMethod.addModifiers(Modifier.PRIVATE, Modifier.STATIC);
+    factoryMethod.returns(value.parameterizedOutputClass());
+
+    for (TypeVariableName typeVariable : value.typeVariables()) {
+      factoryMethod.addTypeVariable(typeVariable);
     }
-    return fields;
+
+    factoryMethod.addCode(
+        "return new AutoValue_$N_$N(",
+        value.outputClass().enclosingClassName().simpleName(),
+        value.outputClass().simpleName());
+
+    boolean needsComma = false;
+    for (Parameter parameter : value.parameters()) {
+      factoryMethod.addParameter(parameter.type(), parameter.name());
+
+      if (needsComma) {
+        factoryMethod.addCode(", ");
+      }
+      needsComma = true;
+
+      factoryMethod.addCode("$N", parameter.name());
+    }
+    factoryMethod.addCode(");\n");
+
+    return factoryMethod.build();
   }
 
   private static Iterable<MethodSpec> createGetters(OutputValue value) {
@@ -125,18 +139,18 @@ public class ValueTypeFactory {
     return getters;
   }
 
-  private static FieldSpec createField(Parameter parameter) {
-    return FieldSpec.builder(parameter.type(), parameter.name())
-        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-        .build();
-  }
-
   private static MethodSpec createGetter(Parameter parameter) {
     MethodSpec.Builder builder =
         MethodSpec.methodBuilder(parameter.name())
-            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-            .returns(parameter.type())
-            .addStatement("return $L", parameter.name());
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .returns(parameter.type());
+
+    // TODO(dflemstr): @AutoValue prohibits mutable getters so we need to suppress its lint.  Why do
+    // we want to support this?
+    if (parameter.type() instanceof ArrayTypeName) {
+      builder.addAnnotation(
+          AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "\"mutable\"").build());
+    }
 
     if (parameter.canBeNull()) {
       builder.addAnnotation(Nullable.class);
@@ -145,110 +159,6 @@ public class ValueTypeFactory {
     }
 
     return builder.build();
-  }
-
-  private static MethodSpec createEquals(OutputValue value) throws ParserException {
-    MethodSpec.Builder result =
-        MethodSpec.methodBuilder("equals")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .returns(boolean.class)
-            .addParameter(Object.class, "other");
-
-    if (!value.parameters().iterator().hasNext()) {
-      result.addStatement("return other instanceof $T", value.outputClass());
-      return result.build();
-    }
-
-    result.addStatement("if (other == this) return true");
-    result.addStatement("if (!(other instanceof $T)) return false", value.outputClass());
-
-    result.addStatement("$1T o = ($1T) other", value.outputClass());
-    result.addCode("$[return ");
-    boolean first = true;
-    for (Parameter parameter : value.parameters()) {
-      if (first) {
-        first = false;
-      } else {
-        result.addCode("\n&& ");
-      }
-
-      String fieldName = parameter.name();
-      if (parameter.type().isPrimitive()) {
-        result.addCode("o.$1L == $1L", fieldName);
-      } else {
-        if (parameter.canBeNull()) {
-          result.addCode("equal(o.$1L, this.$1L)", fieldName);
-        } else {
-          result.addCode("o.$1L.equals(this.$1L)", fieldName);
-        }
-      }
-    }
-    result.addCode(";\n$]");
-
-    return result.build();
-  }
-
-  private static MethodSpec createHashCode(OutputValue value) {
-    MethodSpec.Builder result =
-        MethodSpec.methodBuilder("hashCode")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .returns(int.class);
-
-    if (!value.hasParameters()) {
-      result.addStatement("return 0");
-      return result.build();
-    }
-
-    result.addStatement("int result = 0");
-    for (Parameter parameter : value.parameters()) {
-      String fieldName = parameter.name();
-      result.addCode("result = result * 31 + ");
-      if (parameter.type().isPrimitive()) {
-        TypeName boxedType = parameter.type().box();
-        result.addStatement("$T.valueOf($L).hashCode()", boxedType, fieldName);
-      } else {
-        if (parameter.canBeNull()) {
-          result.addStatement("($1L != null ? $1L.hashCode() : 0)", fieldName);
-        } else {
-          result.addStatement("$L.hashCode()", fieldName);
-        }
-      }
-    }
-    result.addStatement("return result");
-    return result.build();
-  }
-
-  private static MethodSpec createToString(OutputValue value) {
-    MethodSpec.Builder result =
-        MethodSpec.methodBuilder("toString")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .returns(String.class);
-
-    if (!value.parameters().iterator().hasNext()) {
-      result.addStatement("return \"$L{}\"", value.name());
-      return result.build();
-    }
-
-    result.addStatement("$1T builder = new $1T()", StringBuilder.class);
-
-    boolean first = true;
-    for (Parameter parameter : value.parameters()) {
-      String fieldName = parameter.name();
-
-      if (first) {
-        first = false;
-        result.addStatement("builder.append(\"$2L{$1N=\").append($1L)", fieldName, value.name());
-      } else {
-        result.addStatement("builder.append(\", $1N=\").append($1L)", fieldName);
-      }
-    }
-
-    result.addStatement("return builder.append('}').toString()", value.name());
-
-    return result.build();
   }
 
   private static MethodSpec createAsSpecMethod(OutputValue value, OutputSpec spec) {
