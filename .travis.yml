@@ -9,7 +9,7 @@ addons:
 
 install: true
 
-script: mvn -X -Pci clean verify
+script: mvn clean verify
 
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
