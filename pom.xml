@@ -201,19 +201,5 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>ci</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.6.0</version>
-                        <configuration>
-                            <release>7</release>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 </project>

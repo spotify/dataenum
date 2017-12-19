@@ -24,13 +24,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Collections;
 import java.util.List;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;
 
 public class DataenumUtilsTest {
 
   @Test
   public void checkNotNullShouldThrowForNull() throws Exception {
-    assertThatThrownBy(() -> DataenumUtils.checkNotNull(null))
+    assertThatThrownBy(
+            new ThrowingCallable() {
+              @Override
+              public void call() throws Throwable {
+                DataenumUtils.checkNotNull(null);
+              }
+            })
         .isInstanceOf(NullPointerException.class);
   }
 

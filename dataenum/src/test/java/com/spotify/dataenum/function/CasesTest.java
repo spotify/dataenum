@@ -41,6 +41,13 @@ public class CasesTest {
 
   @Test
   public void shouldThrowUnsupportedOperationForTodo() throws Exception {
-    assertThatThrownBy(() -> Cases.todo()).isInstanceOf(UnsupportedOperationException.class);
+    assertThatThrownBy(
+            new ThrowingCallable() {
+              @Override
+              public void call() throws Throwable {
+                Cases.todo();
+              }
+            })
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 }
