@@ -32,6 +32,15 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.coveo</groupId>
@@ -94,12 +103,19 @@
             </build>
         </profile>
         <profile>
-            <id>ci</id>
+            <id>java9</id>
+            <activation>
+                <jdk>9</jdk>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
+                            <!--
+                            'release' is better than 'source+target' as it includes getting the
+                            right set of classes (in rt.jar before java 9).
+                            -->
                             <release>7</release>
                         </configuration>
                     </plugin>

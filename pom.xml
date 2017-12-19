@@ -209,7 +209,10 @@
             </build>
         </profile>
         <profile>
-            <id>ci</id>
+            <id>java9</id>
+            <activation>
+                <jdk>9</jdk>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

@@ -2,12 +2,6 @@ language: java
 
 jdk:
   - oraclejdk9
-addons:
-  apt:
-    packages:
-      - oracle-java9-installer
-
-install: true
 
 script: mvn clean verify
 
