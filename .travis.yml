@@ -5,7 +5,7 @@ jdk:
 
 install: true
 
-script: mvn -Pci clean verify
+script: mvn -X -Pci clean verify
 
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
