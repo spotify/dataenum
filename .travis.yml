@@ -1,11 +1,11 @@
 language: java
 
 jdk:
-  - openjdk7
+  - oraclejdk9
 
 install: true
 
-script: mvn clean verify
+script: mvn -Pci clean verify
 
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
