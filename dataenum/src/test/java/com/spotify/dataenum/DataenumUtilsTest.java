@@ -19,47 +19,45 @@
  */
 package com.spotify.dataenum;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.util.Collections;
 import java.util.List;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class DataenumUtilsTest {
 
+  @Rule public ExpectedException thrown = ExpectedException.none();
+
   @Test
   public void checkNotNullShouldThrowForNull() throws Exception {
-    assertThatThrownBy(
-            new ThrowingCallable() {
-              @Override
-              public void call() throws Throwable {
-                DataenumUtils.checkNotNull(null);
-              }
-            })
-        .isInstanceOf(NullPointerException.class);
+
+    thrown.expect(NullPointerException.class);
+    DataenumUtils.checkNotNull(null);
   }
 
   @Test
   public void checkNotNullShouldReturnInputOnNonNull() throws Exception {
     Object expected = new Object();
 
-    assertThat(DataenumUtils.checkNotNull(expected)).isEqualTo(expected);
+    assertThat(DataenumUtils.checkNotNull(expected), is(expected));
   }
 
   @Test
   public void equalsShouldSupportReferenceIdentity() throws Exception {
     Object o = new Object();
 
-    assertThat(DataenumUtils.equal(o, o)).isTrue();
+    assertThat(DataenumUtils.equal(o, o), is(true));
   }
 
   @Test
   public void equalsShouldSupportNulls() throws Exception {
-    assertThat(DataenumUtils.equal(null, new Object())).isFalse();
-    assertThat(DataenumUtils.equal(new Object(), null)).isFalse();
-    assertThat(DataenumUtils.equal(null, null)).isTrue();
+    assertThat(DataenumUtils.equal(null, new Object()), is(false));
+    assertThat(DataenumUtils.equal(new Object(), null), is(false));
+    assertThat(DataenumUtils.equal(null, null), is(true));
   }
 
   @Test
@@ -67,6 +65,6 @@ public class DataenumUtilsTest {
     List<Integer> one = Collections.singletonList(1);
     List<Integer> two = Collections.singletonList(1);
 
-    assertThat(DataenumUtils.equal(one, two)).isTrue();
+    assertThat(DataenumUtils.equal(one, two), is(true));
   }
 }

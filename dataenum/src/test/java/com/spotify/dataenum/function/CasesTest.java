@@ -19,35 +19,26 @@
  */
 package com.spotify.dataenum.function;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class CasesTest {
 
+  @Rule public ExpectedException thrown = ExpectedException.none();
+
   @Test
   public void shouldThrowIllegalStateExceptionForIllegal() throws Exception {
-    assertThatThrownBy(
-            new ThrowingCallable() {
-              @Override
-              public void call() throws Throwable {
-                Cases.illegal("don't do this dude");
-              }
-            })
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessage("don't do this dude");
+
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("don't do this dude");
+    Cases.illegal("don't do this dude");
   }
 
   @Test
   public void shouldThrowUnsupportedOperationForTodo() throws Exception {
-    assertThatThrownBy(
-            new ThrowingCallable() {
-              @Override
-              public void call() throws Throwable {
-                Cases.todo();
-              }
-            })
-        .isInstanceOf(UnsupportedOperationException.class);
+
+    thrown.expect(UnsupportedOperationException.class);
+    Cases.todo();
   }
 }
