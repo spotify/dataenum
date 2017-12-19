@@ -1,13 +1,7 @@
 language: java
 
-sudo: false
-addons:
-  apt:
-    packages:
-      - oracle-java7-installer
-
 jdk:
-  - oraclejdk7
+  - openjdk7
 
 install: true
 
