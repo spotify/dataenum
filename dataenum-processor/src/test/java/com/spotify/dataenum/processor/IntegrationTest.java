@@ -31,6 +31,7 @@ public class IntegrationTest {
   private static void assertThatEnumGeneratedMatchingFile(String className) {
     Compilation compilation =
         javac()
+            .withOptions("-implicit:class")
             .withProcessors(new DataEnumProcessor())
             .compile(JavaFileObjects.forResource(className + "_dataenum.java"));
 
