@@ -22,8 +22,10 @@ package com.spotify.dataenum.processor;
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.Compiler.javac;
 
+import com.google.auto.value.processor.AutoValueProcessor;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class IntegrationTest {
@@ -31,7 +33,7 @@ public class IntegrationTest {
   private static void assertThatEnumGeneratedMatchingFile(String className) {
     Compilation compilation =
         javac()
-            .withProcessors(new DataEnumProcessor())
+            .withProcessors(new DataEnumProcessor(), new AutoValueProcessor())
             .compile(JavaFileObjects.forResource(className + "_dataenum.java"));
 
     assertThat(compilation).succeededWithoutWarnings();
@@ -95,6 +97,9 @@ public class IntegrationTest {
     assertThatEnumGeneratedMatchingFile("VarargValue");
   }
 
+  @Ignore(
+      "This test is unsound since it encourages creating generic arrays, which can cause "
+          + "severe runtime problems (e.g. ClassCastExceptions).")
   @Test
   public void genericVarargValueEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("GenericVarargValue");
@@ -110,8 +115,10 @@ public class IntegrationTest {
     Compilation compilation =
         javac()
             .withOptions("-implicit:class")
-            .withProcessors(new DataEnumProcessor())
-            .compile(JavaFileObjects.forResource("ReferencesOther_dataenum.java"));
+            .withProcessors(new DataEnumProcessor(), new AutoValueProcessor())
+            .compile(
+                JavaFileObjects.forResource("ReferencesOther_dataenum.java"),
+                JavaFileObjects.forResource("just/some/pkg/InPackage_dataenum.java"));
 
     assertThat(compilation).succeededWithoutWarnings();
     assertThat(compilation)

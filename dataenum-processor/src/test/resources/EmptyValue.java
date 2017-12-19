@@ -17,11 +17,10 @@
  * limitations under the License.
  * -/-/-
  */
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
-import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -31,7 +30,7 @@ public abstract class EmptyValue {
   }
 
   public static EmptyValue value() {
-    return new Value();
+    return Value.create();
   }
 
   public final boolean isValue() {
@@ -46,23 +45,13 @@ public abstract class EmptyValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends EmptyValue {
-    private Value() {
+  @AutoValue
+  public abstract static class Value extends EmptyValue {
+    Value() {
     }
 
-    @Override
-    public boolean equals(Object other) {
-      return other instanceof Value;
-    }
-
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-
-    @Override
-    public String toString() {
-      return "Value{}";
+    private static Value create() {
+      return new AutoValue_EmptyValue_Value();
     }
 
     @Override

@@ -17,15 +17,11 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
-
-
+import com.google.auto.value.AutoValue;
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
 import java.lang.Object;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.StringBuilder;
 import java.lang.Throwable;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
@@ -36,11 +32,11 @@ public abstract class GenericValues<L, R extends Throwable> {
   }
 
   public static <L, R extends Throwable> GenericValues<L, R> left(@Nonnull L other) {
-    return new Left<L>(other).asGenericValues();
+    return Left.create(other).asGenericValues();
   }
 
   public static <L, R extends Throwable> GenericValues<L, R> right(@Nonnull R error) {
-    return new Right<R>(error).asGenericValues();
+    return Right.create(error).asGenericValues();
   }
 
   public final boolean isLeft() {
@@ -62,51 +58,29 @@ public abstract class GenericValues<L, R extends Throwable> {
   public abstract void match(@Nonnull Consumer<Left<L>> left, @Nonnull Consumer<Right<R>> right);
 
   public abstract <R_> R_ map(@Nonnull Function<Left<L>, R_> left,
-      @Nonnull Function<Right<R>, R_> right);
+                              @Nonnull Function<Right<R>, R_> right);
 
-  public static final class Left<L> extends GenericValues<L, Throwable> {
-    private final L other;
+  @AutoValue
+  public abstract static class Left<L> extends GenericValues<L, Throwable> {
+    Left() {
+    }
 
-    private Left(L other) {
-      this.other = checkNotNull(other);
+    private static <L> Left<L> create(L other) {
+      return new AutoValue_GenericValues_Left(other);
     }
 
     @Nonnull
-    public final L other() {
-      return other;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Left)) return false;
-      Left o = (Left) other;
-      return o.other.equals(this.other);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + other.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Left{other=").append(other);
-      return builder.append('}').toString();
-    }
+    public abstract L other();
 
     @Override
     public final void match(@Nonnull Consumer<Left<L>> left,
-        @Nonnull Consumer<Right<Throwable>> right) {
+                            @Nonnull Consumer<Right<Throwable>> right) {
       left.accept(this);
     }
 
     @Override
     public final <R_> R_ map(@Nonnull Function<Left<L>, R_> left,
-        @Nonnull Function<Right<Throwable>, R_> right) {
+                             @Nonnull Function<Right<Throwable>, R_> right) {
       return left.apply(this);
     }
 
@@ -115,49 +89,27 @@ public abstract class GenericValues<L, R extends Throwable> {
     }
   }
 
-  public static final class Right<R extends Throwable> extends GenericValues<Object, R> {
-    private final R error;
+  @AutoValue
+  public abstract static class Right<R extends Throwable> extends GenericValues<Object, R> {
+    Right() {
+    }
 
-    private Right(R error) {
-      this.error = checkNotNull(error);
+    private static <R extends Throwable> Right<R> create(R error) {
+      return new AutoValue_GenericValues_Right(error);
     }
 
     @Nonnull
-    public final R error() {
-      return error;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Right)) return false;
-      Right o = (Right) other;
-      return o.error.equals(this.error);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = 0;
-      result = result * 31 + error.hashCode();
-      return result;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Right{error=").append(error);
-      return builder.append('}').toString();
-    }
+    public abstract R error();
 
     @Override
     public final void match(@Nonnull Consumer<Left<Object>> left,
-        @Nonnull Consumer<Right<R>> right) {
+                            @Nonnull Consumer<Right<R>> right) {
       right.accept(this);
     }
 
     @Override
     public final <R_> R_ map(@Nonnull Function<Left<Object>, R_> left,
-        @Nonnull Function<Right<R>, R_> right) {
+                             @Nonnull Function<Right<R>, R_> right) {
       return right.apply(this);
     }
 

@@ -55,8 +55,8 @@ public class ValueMethods {
     StringBuilder newString = new StringBuilder();
     List<Object> newArgs = new ArrayList<>();
 
-    newString.append("return new $T(");
-    newArgs.add(value.parameterizedOutputClass());
+    newString.append("return $T.create(");
+    newArgs.add(value.outputClass());
 
     boolean first = true;
 
