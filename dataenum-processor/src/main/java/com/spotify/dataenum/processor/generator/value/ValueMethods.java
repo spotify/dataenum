@@ -45,13 +45,6 @@ public class ValueMethods {
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(spec.parameterizedOutputClass());
 
-    if (value.hasVarargs()) {
-      factory.varargs();
-      if (value.hasTypeVariables()) {
-        factory.addAnnotation(SafeVarargs.class);
-      }
-    }
-
     StringBuilder newString = new StringBuilder();
     List<Object> newArgs = new ArrayList<>();
 

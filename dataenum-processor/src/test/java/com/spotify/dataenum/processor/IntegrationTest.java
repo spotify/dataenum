@@ -93,12 +93,13 @@ public class IntegrationTest {
 
   @Test
   public void varargValueEnum() throws Exception {
-    assertThatEnumGeneratedMatchingFile("VarargValue");
-  }
-
-  @Test
-  public void genericVarargValueEnum() throws Exception {
-    assertThatEnumGeneratedMatchingFile("GenericVarargValue");
+    Compilation compilation =
+        javac()
+            .withProcessors(new DataEnumProcessor())
+            .compile(JavaFileObjects.forResource("VarargValue_dataenum.java"));
+    assertThat(compilation).failed();
+    assertThat(compilation).hadErrorCount(1);
+    assertThat(compilation).hadErrorContaining("Vararg parameters not permitted");
   }
 
   @Test
@@ -121,7 +122,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void shouldWarnAboutPublicSpec() throws Exception {
+  public void shouldNotWarnAboutPublicSpec() throws Exception {
     Compilation compilation =
         javac()
             .withProcessors(new DataEnumProcessor())

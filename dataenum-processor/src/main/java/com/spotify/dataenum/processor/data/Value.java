@@ -25,12 +25,10 @@ import com.spotify.dataenum.processor.util.Iterables;
 public class Value {
   private final String simpleName;
   private final Iterable<Parameter> parameters;
-  private final boolean varargs;
 
-  public Value(String simpleName, Iterable<Parameter> parameters, boolean varargs) {
+  public Value(String simpleName, Iterable<Parameter> parameters) {
     this.simpleName = simpleName;
     this.parameters = parameters;
-    this.varargs = varargs;
   }
 
   public String name() {
@@ -43,9 +41,5 @@ public class Value {
 
   public boolean hasParameters() {
     return !Iterables.isEmpty(parameters());
-  }
-
-  public boolean hasVarargs() {
-    return varargs;
   }
 }

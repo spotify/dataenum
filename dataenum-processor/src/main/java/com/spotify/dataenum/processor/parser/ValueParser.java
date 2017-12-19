@@ -74,6 +74,14 @@ final class ValueParser {
       return null;
     }
 
+    if (methodElement.isVarArgs()) {
+      messager.printMessage(
+          Diagnostic.Kind.ERROR,
+          String.format("Vararg parameters not permitted: %s", element),
+          element);
+      return null;
+    }
+
     List<Parameter> parameters = new ArrayList<>();
     for (VariableElement parameterElement : methodElement.getParameters()) {
       String parameterName = parameterElement.getSimpleName().toString();
@@ -90,10 +98,8 @@ final class ValueParser {
       parameters.add(new Parameter(parameterName, parameterType, nullable));
     }
 
-    boolean varargs = methodElement.isVarArgs();
-
     String valueSimpleName = methodElement.getSimpleName().toString();
-    return new Value(valueSimpleName, parameters, varargs);
+    return new Value(valueSimpleName, parameters);
   }
 
   private static boolean isValueSpecMarker(
