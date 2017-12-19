@@ -48,7 +48,7 @@ message.match(
 
 In this example only one of the two lambdas will be executed depending on the message type, just like with the
 if-statements. `match` is just a method that takes lambdas as arguments, but if you write expressions with linebreaks
-like in the example above it looks quite similar to a switch-statement, a match-expression on scala, or a
+like in the example above it looks quite similar to a switch-statement, a match-expression in Scala, or a
 when-expression in Kotlin. DataEnum makes use of this similarity to make match-statements look and feel like a
 language construct.
 
