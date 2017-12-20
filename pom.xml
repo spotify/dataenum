@@ -135,7 +135,7 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <header>license.header</header>
+                    <header>apache2.header</header>
                     <excludes>
                         <exclude>**/pom.xml</exclude>
                         <exclude>**/*.groovy</exclude>
