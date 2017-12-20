@@ -58,8 +58,7 @@ final class OutputValueFactory {
       }
     }
 
-    return new OutputValue(
-        outputClass, value.name(), parameters, typeVariables, value.hasVarargs());
+    return new OutputValue(outputClass, value.name(), parameters, typeVariables);
   }
 
   private static boolean isDataEnumParameter(TypeName rawParamType) {

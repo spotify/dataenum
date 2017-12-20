@@ -31,19 +31,16 @@ public class OutputValue {
   private final Iterable<TypeVariableName> typeVariables;
   private final String name;
   private final Iterable<Parameter> parameters;
-  private final boolean varargs;
 
   public OutputValue(
       ClassName outputClass,
       String name,
       Iterable<Parameter> parameters,
-      Iterable<TypeVariableName> typeVariables,
-      boolean varargs) {
+      Iterable<TypeVariableName> typeVariables) {
     this.outputClass = outputClass;
     this.name = name;
     this.parameters = parameters;
     this.typeVariables = typeVariables;
-    this.varargs = varargs;
   }
 
   public ClassName outputClass() {
@@ -77,9 +74,5 @@ public class OutputValue {
 
   public boolean hasParameters() {
     return !Iterables.isEmpty(parameters());
-  }
-
-  public boolean hasVarargs() {
-    return varargs;
   }
 }
