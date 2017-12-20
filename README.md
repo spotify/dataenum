@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/spotify/dataenum.svg?branch=master)](https://travis-ci.org/spotify/dataenum)
 [![codecov](https://codecov.io/gh/spotify/dataenum/branch/master/graph/badge.svg)](https://codecov.io/gh/spotify/dataenum)
-[![Maven Central](https://img.shields.io/maven-central/v/com.spotify/dataenum.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.spotify%22%20dataenum*)
+[![Maven Central](https://img.shields.io/maven-central/v/com.spotify.dataenum/dataenum.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.spotify.dataenum%22%20dataenum*)
 [![License](https://img.shields.io/github/license/spotify/dataenum.svg)](LICENSE)
 
 # DataEnum
