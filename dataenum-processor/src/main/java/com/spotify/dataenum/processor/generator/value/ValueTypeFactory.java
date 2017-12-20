@@ -26,19 +26,26 @@ import com.spotify.dataenum.processor.generator.match.MapMethods;
 import com.spotify.dataenum.processor.generator.match.MatchMethods;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.spotify.dataenum.processor.util.Iterables;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
 public class ValueTypeFactory {
+
+  static final AnnotationSpec SUPPRESS_UNCHECKED_WARNINGS =
+      AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "$S", "unchecked").build();
 
   private ValueTypeFactory() {}
 
@@ -163,7 +170,8 @@ public class ValueTypeFactory {
     result.addStatement("if (other == this) return true");
     result.addStatement("if (!(other instanceof $T)) return false", value.outputClass());
 
-    result.addStatement("$1T o = ($1T) other", value.outputClass());
+    TypeName wildCardTypeName = withWildCardTypeParameters(value);
+    result.addStatement("$1T o = ($1T) other", wildCardTypeName);
     result.addCode("$[return ");
     boolean first = true;
     for (Parameter parameter : value.parameters()) {
@@ -187,6 +195,18 @@ public class ValueTypeFactory {
     result.addCode(";\n$]");
 
     return result.build();
+  }
+
+  private static TypeName withWildCardTypeParameters(OutputValue value) {
+    if (!value.hasTypeVariables()) {
+      return value.outputClass();
+    }
+
+    TypeName[] wildCards = new TypeName[Iterables.sizeOf(value.typeVariables())];
+
+    Arrays.fill(wildCards, WildcardTypeName.subtypeOf(TypeName.OBJECT));
+
+    return ParameterizedTypeName.get(value.outputClass(), wildCards);
   }
 
   private static MethodSpec createHashCode(OutputValue value) {
@@ -252,18 +272,34 @@ public class ValueTypeFactory {
   }
 
   private static MethodSpec createAsSpecMethod(OutputValue value, OutputSpec spec) {
+    List<TypeVariableName> missingTypeVariables = extractMissingTypeVariablesForValue(value, spec);
+
+    Builder builder =
+        MethodSpec.methodBuilder("as" + spec.outputClass().simpleName())
+            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+            .returns(spec.parameterizedOutputClass())
+            .addTypeVariables(missingTypeVariables)
+            .addStatement("return ($T) this", spec.parameterizedOutputClass());
+
+    // if there are type variables that this sub-type doesn't use, they will lead to 'unchecked
+    // cast'
+    // warnings when compiling the generated code. These warnings are safe to suppress, since this
+    // sub type will never use those type variables.
+    if (!missingTypeVariables.isEmpty()) {
+      builder.addAnnotation(SUPPRESS_UNCHECKED_WARNINGS);
+    }
+
+    return builder.build();
+  }
+
+  static List<TypeVariableName> extractMissingTypeVariablesForValue(
+      OutputValue value, OutputSpec spec) {
     List<TypeVariableName> missingTypeVariables = new ArrayList<>();
     for (TypeVariableName typeVariableName : spec.typeVariables()) {
       if (!Iterables.contains(value.typeVariables(), typeVariableName)) {
         missingTypeVariables.add(typeVariableName);
       }
     }
-
-    return MethodSpec.methodBuilder("as" + spec.outputClass().simpleName())
-        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-        .returns(spec.parameterizedOutputClass())
-        .addTypeVariables(missingTypeVariables)
-        .addStatement("return ($T) this", spec.parameterizedOutputClass())
-        .build();
+    return missingTypeVariables;
   }
 }

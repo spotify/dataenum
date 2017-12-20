@@ -23,6 +23,7 @@ import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
 import com.spotify.dataenum.processor.data.Parameter;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.ParameterSpec;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,12 +96,19 @@ public class ValueMethods {
         .build();
   }
 
-  public MethodSpec createAsMethod() {
-    return MethodSpec.methodBuilder("as" + value.name())
-        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-        .returns(value.parameterizedOutputClass())
-        .addStatement("return ($T) this", value.parameterizedOutputClass())
-        .build();
+  public MethodSpec createAsMethod(OutputSpec spec) {
+    Builder builder =
+        MethodSpec.methodBuilder("as" + value.name())
+            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+            .returns(value.parameterizedOutputClass())
+            .addStatement("return ($T) this", value.parameterizedOutputClass());
+
+    if (!ValueTypeFactory.extractMissingTypeVariablesForValue(value, spec).isEmpty()
+        && value.hasTypeVariables()) {
+      builder.addAnnotation(ValueTypeFactory.SUPPRESS_UNCHECKED_WARNINGS);
+    }
+
+    return builder.build();
   }
 
   private static String asCamelCase(String text) {
