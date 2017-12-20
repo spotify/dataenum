@@ -3,10 +3,10 @@ language: java
 jdk:
   - oraclejdk9
 
-script: mvn clean verify
+script: mvn -Pcoverage clean verify
 
-#after_success:
-#  - bash <(curl -s https://codecov.io/bash)
-#
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 #notifications:
 #  email: false
