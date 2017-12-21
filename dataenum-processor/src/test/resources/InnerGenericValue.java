@@ -26,6 +26,7 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.StringBuilder;
+import java.lang.SuppressWarnings;
 import java.util.List;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
@@ -93,7 +94,7 @@ public abstract class InnerGenericValue<T> {
     public boolean equals(Object other) {
       if (other == this) return true;
       if (!(other instanceof Many)) return false;
-      Many o = (Many) other;
+      Many<?> o = (Many<?>) other;
       return o.values.equals(this.values);
     }
 
@@ -144,7 +145,7 @@ public abstract class InnerGenericValue<T> {
     public boolean equals(Object other) {
       if (other == this) return true;
       if (!(other instanceof One)) return false;
-      One o = (One) other;
+      One<?> o = (One<?>) other;
       return o.value.equals(this.value);
     }
 
@@ -210,6 +211,7 @@ public abstract class InnerGenericValue<T> {
       return none.apply(this);
     }
 
+    @SuppressWarnings("unchecked")
     public final <T> InnerGenericValue<T> asInnerGenericValue() {
       return (InnerGenericValue<T>) this;
     }

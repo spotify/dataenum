@@ -43,4 +43,14 @@ public class Iterables {
     }
     return out.toArray((T[]) Array.newInstance(tClass, out.size()));
   }
+
+  public static <T> int sizeOf(Iterable<T> iterable) {
+    int size = 0;
+
+    for (T entry : iterable) {
+      size++;
+    }
+
+    return size;
+  }
 }

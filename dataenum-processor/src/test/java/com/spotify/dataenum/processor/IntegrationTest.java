@@ -77,6 +77,16 @@ public class IntegrationTest {
   }
 
   @Test
+  public void genericValuesGeneratedCodeCompiles() throws Exception {
+    Compilation compilation =
+        javac()
+            .withOptions("-Xlint:all")
+            .compile(JavaFileObjects.forResource("GenericValues.java"));
+
+    assertThat(compilation).succeededWithoutWarnings();
+  }
+
+  @Test
   public void recursiveGenericValueEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("RecursiveGenericValue");
   }

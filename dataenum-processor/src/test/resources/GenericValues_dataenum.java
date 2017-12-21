@@ -24,4 +24,6 @@ import com.spotify.dataenum.dataenum_case;
 interface GenericValues_dataenum<L, R extends Throwable> {
   dataenum_case Left(L other);
   dataenum_case Right(R error);
+  dataenum_case Neither(String s);
+  dataenum_case Both(L one, R two);
 }

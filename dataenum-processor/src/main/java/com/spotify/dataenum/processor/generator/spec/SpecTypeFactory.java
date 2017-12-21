@@ -56,7 +56,7 @@ public final class SpecTypeFactory {
       ValueMethods valueMethods = new ValueMethods(value);
       factoryMethods.add(valueMethods.createFactoryMethod(spec));
       isMethods.add(valueMethods.createIsMethod());
-      asMethods.add(valueMethods.createAsMethod());
+      asMethods.add(valueMethods.createAsMethod(spec));
     }
 
     TypeSpec.Builder enumBuilder =

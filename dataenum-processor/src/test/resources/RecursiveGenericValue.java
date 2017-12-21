@@ -26,6 +26,7 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.StringBuilder;
+import java.lang.SuppressWarnings;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
@@ -63,10 +64,12 @@ public abstract class RecursiveGenericValue<L, R> {
     return (Branch<L, R>) this;
   }
 
+  @SuppressWarnings("unchecked")
   public final Left<L> asLeft() {
     return (Left<L>) this;
   }
 
+  @SuppressWarnings("unchecked")
   public final Right<R> asRight() {
     return (Right<R>) this;
   }
@@ -101,7 +104,7 @@ public abstract class RecursiveGenericValue<L, R> {
     public boolean equals(Object other) {
       if (other == this) return true;
       if (!(other instanceof Branch)) return false;
-      Branch o = (Branch) other;
+      Branch<?, ?> o = (Branch<?, ?>) other;
       return o.left.equals(this.left)
           && o.right.equals(this.right);
     }
@@ -155,7 +158,7 @@ public abstract class RecursiveGenericValue<L, R> {
     public boolean equals(Object other) {
       if (other == this) return true;
       if (!(other instanceof Left)) return false;
-      Left o = (Left) other;
+      Left<?> o = (Left<?>) other;
       return o.value.equals(this.value);
     }
 
@@ -185,6 +188,7 @@ public abstract class RecursiveGenericValue<L, R> {
       return left.apply(this);
     }
 
+    @SuppressWarnings("unchecked")
     public final <R> RecursiveGenericValue<L, R> asRecursiveGenericValue() {
       return (RecursiveGenericValue<L, R>) this;
     }
@@ -206,7 +210,7 @@ public abstract class RecursiveGenericValue<L, R> {
     public boolean equals(Object other) {
       if (other == this) return true;
       if (!(other instanceof Right)) return false;
-      Right o = (Right) other;
+      Right<?> o = (Right<?>) other;
       return o.value.equals(this.value);
     }
 
@@ -236,6 +240,7 @@ public abstract class RecursiveGenericValue<L, R> {
       return right.apply(this);
     }
 
+    @SuppressWarnings("unchecked")
     public final <L> RecursiveGenericValue<L, R> asRecursiveGenericValue() {
       return (RecursiveGenericValue<L, R>) this;
     }
