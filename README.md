@@ -84,7 +84,7 @@ duplication of some concepts defined in `java.util.function` (`Consumer`, `Funct
 
 ## Using it in your project
 
-The latest version of DataEnum is available through Maven Central (LATEST_RELEASE below is 1.0.1):
+The latest version of DataEnum is available through Maven Central (LATEST_RELEASE below is ![latest not found](https://img.shields.io/maven-central/v/com.spotify.dataenum/dataenum.svg)):
 
 #### Gradle
 
