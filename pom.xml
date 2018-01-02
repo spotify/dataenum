@@ -41,8 +41,8 @@
 
     <scm>
         <url>https://github.com/spotify/dataenum</url>
-        <connection>scm:git:https://github.com/spotify/dataenum.git</connection>
-        <developerConnection>scm:git:git://git@github.com:spotify/dataenum.git</developerConnection>
+        <connection>scm:git:git@github.com:spotify/dataenum.git</connection>
+        <developerConnection>scm:git:git@github.com:spotify/dataenum.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
