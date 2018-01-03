@@ -49,6 +49,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <last.release>1.0.2</last.release>
     </properties>
 
     <modules>
@@ -122,6 +123,38 @@
                     <configuration>
                         <skipCheckLicense>true</skipCheckLicense>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.siom79.japicmp</groupId>
+                    <artifactId>japicmp-maven-plugin</artifactId>
+                    <version>0.11.0</version>
+                    <configuration>
+                        <oldVersion>
+                            <dependency>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <version>${last.release}</version>
+                                <type>jar</type>
+                            </dependency>
+                        </oldVersion>
+                        <newVersion>
+                            <file>
+                                <path>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</path>
+                            </file>
+                        </newVersion>
+                        <parameter>
+                            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+                            <onlyModified>true</onlyModified>
+                        </parameter>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>cmp</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
