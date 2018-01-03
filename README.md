@@ -142,10 +142,12 @@ Some things to note:
 - The interface name has to end with `_dataenum`. This is to make the interface stick out and make
   it easier to filter out from artifacts and exclude from static analysis.
 
-- The methods in the interface have to return a `dataenum_case`. Each method corresponds to one of the
-  possible cases of the enum, and the parameters of the method becomes the parameters of that case. Note
-  that the method names from the interface will be used as class names for the cases, so you'll want to
-  name them using CamelCase as in the example above.
+- The methods in the interface have to be declared as returning a `dataenum_case`. Each method
+  corresponds to one of the possible cases of the enum, and the parameters of the method becomes the
+  parameters of that case. Note that the method names from the interface will be used as class names
+  for the cases, so you'll want to name them using CamelCase as in the example above. The methods
+  will never be implemented, and there is no way to create a `dataenum_case` instance, the type is
+  only used as a marker.
 
 - The prefix of the `@DataEnum` annotated interface will be used as the name of a generated super-class
   (`MyMessages` in the example above). This class will have factory methods for all the cases.
