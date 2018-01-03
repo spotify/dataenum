@@ -3,7 +3,11 @@ language: java
 jdk:
   - oraclejdk9
 
-script: mvn -Pcoverage clean verify
+before_install:
+  - echo "MAVEN_OPTS='--add-modules java.xml.bind'" > ~/.mavenrc
+
+script:
+  - mvn -Pcoverage clean verify
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
