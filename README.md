@@ -106,7 +106,7 @@ annotationProcessor 'com.spotify.dataenum:dataenum-processor:LATEST_RELEASE'
     <groupId>com.spotify.dataenum</groupId>
     <artifactId>dataenum-processor</artifactId>
     <version>LATEST_RELEASE</version>
-    <scope>optional</scope>
+    <scope>provided</scope>
   </dependency>
 </dependencies>
 ```
