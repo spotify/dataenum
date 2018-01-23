@@ -176,4 +176,16 @@ public class IntegrationTest {
     assertThat(compilation).hadErrorCount(1);
     assertThat(compilation).hadErrorContaining("@DataEnum can only be used on interfaces");
   }
+
+  @Test
+  public void shouldReportDuplicateCaseNames() throws Exception {
+    Compilation compilation =
+        javac()
+            .withProcessors(new DataEnumProcessor())
+            .compile(JavaFileObjects.forResource("DuplicateCases_dataenum.java"));
+    assertThat(compilation).failed();
+    assertThat(compilation).hadErrorCount(2);
+    assertThat(compilation).hadErrorContaining("Duplicate case name 'value'");
+    assertThat(compilation).hadErrorContaining("Duplicate case name 'caseisimportant'");
+  }
 }
