@@ -21,10 +21,13 @@ package com.spotify.dataenum.processor.parser;
 
 import com.spotify.dataenum.processor.data.Value;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic.Kind;
 
 final class ValuesParser {
 
@@ -33,12 +36,22 @@ final class ValuesParser {
   static List<Value> parse(TypeElement enumElement, ProcessingEnvironment processingEnv) {
     boolean error = false;
     List<Value> values = new ArrayList<>();
+    Set<String> valueNames = new HashSet<>();
     for (Element valueElement : enumElement.getEnclosedElements()) {
       Value value = ValueParser.parse(valueElement, processingEnv);
       if (value == null) {
         error = true;
         continue;
       }
+      if (!valueNames.add(value.name())) {
+        processingEnv
+            .getMessager()
+            .printMessage(
+                Kind.ERROR,
+                "Duplicate case name '" + value.name() + "' - case names must be unique",
+                valueElement);
+      }
+
       values.add(value);
     }
 
