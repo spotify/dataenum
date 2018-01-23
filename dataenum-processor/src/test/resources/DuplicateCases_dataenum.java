@@ -20,10 +20,13 @@
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.dataenum_case;
 
-// should lead to one compiler error; for having the same case name twice.
+// should lead to two compiler errors for two times having duplicate case names.
 
 @DataEnum
 interface DuplicateCases_dataenum {
     dataenum_case Value(int param);
     dataenum_case Value(String param);
+
+    dataenum_case caseIsImportant(int param);
+    dataenum_case caseISimportant(String param);
 }

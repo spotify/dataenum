@@ -184,7 +184,8 @@ public class IntegrationTest {
             .withProcessors(new DataEnumProcessor())
             .compile(JavaFileObjects.forResource("DuplicateCases_dataenum.java"));
     assertThat(compilation).failed();
-    assertThat(compilation).hadErrorCount(1);
-    assertThat(compilation).hadErrorContaining("Duplicate case name 'Value'");
+    assertThat(compilation).hadErrorCount(2);
+    assertThat(compilation).hadErrorContaining("Duplicate case name 'value'");
+    assertThat(compilation).hadErrorContaining("Duplicate case name 'caseisimportant'");
   }
 }
