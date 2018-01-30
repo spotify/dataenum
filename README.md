@@ -52,7 +52,7 @@ message.match(
 ```
 
 In this example only one of the two lambdas will be executed depending on the message type, just like with the
-if-statements. `match` is just a method that takes lambdas as arguments, but if you write expressions with linebreaks
+if-statements. `match` is just a method that takes functions as arguments, but if you write expressions with linebreaks
 like in the example above it looks quite similar to a switch-statement, a match-expression in Scala, or a
 when-expression in Kotlin. DataEnum makes use of this similarity to make match-statements look and feel like a
 language construct.
@@ -143,11 +143,11 @@ Some things to note:
   it easier to filter out from artifacts and exclude from static analysis.
 
 - The methods in the interface have to be declared as returning a `dataenum_case`. Each method
-  corresponds to one of the possible cases of the enum, and the parameters of the method becomes the
-  parameters of that case. Note that the method names from the interface will be used as class names
+  corresponds to one of the possible cases of the enum, and the parameters of the method become the
+  member fields of that case. Note that the method names from the interface will be used as class names
   for the cases, so you'll want to name them using CamelCase as in the example above. The methods
-  will never be implemented, and there is no way to create a `dataenum_case` instance, the type is
-  only used as a marker.
+  in the `_dataenum` interface will never be implemented, and there is no way to create a `dataenum_case` 
+  instance. The type is only used as a marker.
 
 - The prefix of the `@DataEnum` annotated interface will be used as the name of a generated super-class
   (`MyMessages` in the example above). This class will have factory methods for all the cases.
