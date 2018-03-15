@@ -21,7 +21,9 @@ package com.spotify.dataenum.processor.util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Iterables {
   public static <T> boolean contains(Iterable<T> iterable, T value) {
@@ -52,5 +54,9 @@ public class Iterables {
     }
 
     return size;
+  }
+
+  public static <T> Iterable<T> fromOptional(Optional<T> input) {
+    return input.map(Collections::singletonList).orElse(Collections.emptyList());
   }
 }

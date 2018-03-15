@@ -19,6 +19,8 @@
  */
 package com.spotify.dataenum.processor.generator.spec;
 
+import static com.spotify.dataenum.processor.util.Iterables.fromOptional;
+
 import com.spotify.dataenum.processor.DataEnumProcessor;
 import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
@@ -34,6 +36,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Generated;
 import javax.lang.model.element.Modifier;
 
@@ -41,7 +44,8 @@ public final class SpecTypeFactory {
 
   private SpecTypeFactory() {}
 
-  public static TypeSpec create(OutputSpec spec) throws ParserException {
+  public static TypeSpec create(OutputSpec spec, Optional<Modifier> constructorAccessModifier)
+      throws ParserException {
     List<TypeSpec> valueTypes = new ArrayList<>();
     List<MethodSpec> factoryMethods = new ArrayList<>();
     List<MethodSpec> isMethods = new ArrayList<>();
@@ -51,7 +55,9 @@ public final class SpecTypeFactory {
     MapMethods mapMethods = new MapMethods(spec.outputValues());
 
     for (OutputValue value : spec.outputValues()) {
-      valueTypes.add(ValueTypeFactory.create(value, spec, matchMethods, mapMethods));
+      valueTypes.add(
+          ValueTypeFactory.create(
+              value, spec, matchMethods, mapMethods, constructorAccessModifier));
 
       ValueMethods valueMethods = new ValueMethods(value);
       factoryMethods.add(valueMethods.createFactoryMethod(spec));
@@ -69,8 +75,11 @@ public final class SpecTypeFactory {
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addTypeVariables(spec.typeVariables());
 
-    // add package-private constructor
-    enumBuilder.addMethod(MethodSpec.constructorBuilder().build());
+    // add constructor with correct access
+    enumBuilder.addMethod(
+        MethodSpec.constructorBuilder()
+            .addModifiers(fromOptional(constructorAccessModifier))
+            .build());
 
     enumBuilder.addTypes(valueTypes);
     enumBuilder.addMethods(factoryMethods);

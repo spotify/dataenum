@@ -19,6 +19,8 @@
  */
 package com.spotify.dataenum.processor.generator.value;
 
+import static com.spotify.dataenum.processor.util.Iterables.fromOptional;
+
 import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
 import com.spotify.dataenum.processor.data.Parameter;
@@ -38,6 +40,7 @@ import com.squareup.javapoet.WildcardTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
@@ -50,7 +53,11 @@ public class ValueTypeFactory {
   private ValueTypeFactory() {}
 
   public static TypeSpec create(
-      OutputValue value, OutputSpec spec, MatchMethods matchMethods, MapMethods mapMethods)
+      OutputValue value,
+      OutputSpec spec,
+      MatchMethods matchMethods,
+      MapMethods mapMethods,
+      Optional<Modifier> constructorAccessModifier)
       throws ParserException {
 
     TypeSpec.Builder typeBuilder =
@@ -59,7 +66,7 @@ public class ValueTypeFactory {
             .superclass(getSuperclassForValue(value, spec))
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
 
-    typeBuilder.addMethod(createConstructor(value));
+    typeBuilder.addMethod(createConstructor(value, constructorAccessModifier));
     typeBuilder.addFields(createFields(value));
     typeBuilder.addMethods(createGetters(value));
     typeBuilder.addMethod(createEquals(value));
@@ -102,8 +109,10 @@ public class ValueTypeFactory {
         spec.outputClass(), superParameters.toArray(new TypeName[] {}));
   }
 
-  private static MethodSpec createConstructor(OutputValue value) {
-    MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
+  private static MethodSpec createConstructor(
+      OutputValue value, Optional<Modifier> constructorAccessModifier) {
+    MethodSpec.Builder constructor =
+        MethodSpec.constructorBuilder().addModifiers(fromOptional(constructorAccessModifier));
     for (Parameter parameter : value.parameters()) {
       constructor.addParameter(parameter.type(), parameter.name());
 
