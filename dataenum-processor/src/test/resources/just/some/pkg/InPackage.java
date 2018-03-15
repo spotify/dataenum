@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class InPackage {
-  private InPackage() {
+  InPackage() {
   }
 
   public static InPackage value1(int param1, boolean param2) {
@@ -56,7 +56,7 @@ public abstract class InPackage {
 
     private final boolean param2;
 
-    private Value1(int param1, boolean param2) {
+    Value1(int param1, boolean param2) {
       this.param1 = param1;
       this.param2 = param2;
     }

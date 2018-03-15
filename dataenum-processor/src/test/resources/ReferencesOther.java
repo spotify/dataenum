@@ -31,7 +31,7 @@ import just.some.pkg.InPackage;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class ReferencesOther {
-  private ReferencesOther() {
+  ReferencesOther() {
   }
 
   public static ReferencesOther another(@Nonnull InPackage other) {
@@ -53,7 +53,7 @@ public abstract class ReferencesOther {
   public static final class Another extends ReferencesOther {
     private final InPackage other;
 
-    private Another(InPackage other) {
+    Another(InPackage other) {
       this.other = checkNotNull(other);
     }
 

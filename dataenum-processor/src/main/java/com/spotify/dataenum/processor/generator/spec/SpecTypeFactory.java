@@ -69,8 +69,8 @@ public final class SpecTypeFactory {
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addTypeVariables(spec.typeVariables());
 
-    // Hide the constructor
-    enumBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE).build());
+    // add package-private constructor
+    enumBuilder.addMethod(MethodSpec.constructorBuilder().build());
 
     enumBuilder.addTypes(valueTypes);
     enumBuilder.addMethods(factoryMethods);

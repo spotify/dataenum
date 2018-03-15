@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class InnerGenericValue<T> {
-  private InnerGenericValue() {
+  InnerGenericValue() {
   }
 
   public static <T> InnerGenericValue<T> many(@Nonnull List<T> values) {
@@ -81,7 +81,7 @@ public abstract class InnerGenericValue<T> {
   public static final class Many<T> extends InnerGenericValue<T> {
     private final List<T> values;
 
-    private Many(List<T> values) {
+    Many(List<T> values) {
       this.values = checkNotNull(values);
     }
 
@@ -132,7 +132,7 @@ public abstract class InnerGenericValue<T> {
   public static final class One<T> extends InnerGenericValue<T> {
     private final T value;
 
-    private One(T value) {
+    One(T value) {
       this.value = checkNotNull(value);
     }
 
@@ -181,7 +181,7 @@ public abstract class InnerGenericValue<T> {
   }
 
   public static final class None extends InnerGenericValue<Object> {
-    private None() {
+    None() {
     }
 
     @Override

@@ -21,6 +21,6 @@ import javax.annotation.Generated;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class Empty {
-  private Empty() {
+  Empty() {
   }
 }

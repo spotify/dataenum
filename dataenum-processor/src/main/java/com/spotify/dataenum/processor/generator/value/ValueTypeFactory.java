@@ -103,7 +103,7 @@ public class ValueTypeFactory {
   }
 
   private static MethodSpec createConstructor(OutputValue value) {
-    MethodSpec.Builder constructor = MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE);
+    MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
     for (Parameter parameter : value.parameters()) {
       constructor.addParameter(parameter.type(), parameter.name());
 

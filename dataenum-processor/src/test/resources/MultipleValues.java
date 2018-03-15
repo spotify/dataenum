@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class MultipleValues {
-  private MultipleValues() {
+  MultipleValues() {
   }
 
   public static MultipleValues value1(int param1, boolean param2) {
@@ -67,7 +67,7 @@ public abstract class MultipleValues {
 
     private final boolean param2;
 
-    private Value1(int param1, boolean param2) {
+    Value1(int param1, boolean param2) {
       this.param1 = param1;
       this.param2 = param2;
     }
@@ -122,7 +122,7 @@ public abstract class MultipleValues {
 
     private final boolean param2;
 
-    private Value2(int param1, boolean param2) {
+    Value2(int param1, boolean param2) {
       this.param1 = param1;
       this.param2 = param2;
     }

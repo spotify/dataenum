@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class RecursiveValue {
-  private RecursiveValue() {
+  RecursiveValue() {
   }
 
   public static RecursiveValue value(@Nonnull RecursiveValue child) {
@@ -53,7 +53,7 @@ public abstract class RecursiveValue {
   public static final class Value extends RecursiveValue {
     private final RecursiveValue child;
 
-    private Value(RecursiveValue child) {
+    Value(RecursiveValue child) {
       this.child = checkNotNull(child);
     }
 

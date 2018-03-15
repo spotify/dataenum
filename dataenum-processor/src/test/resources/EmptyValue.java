@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class EmptyValue {
-  private EmptyValue() {
+  EmptyValue() {
   }
 
   public static EmptyValue value() {
@@ -47,7 +47,7 @@ public abstract class EmptyValue {
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
   public static final class Value extends EmptyValue {
-    private Value() {
+    Value() {
     }
 
     @Override
