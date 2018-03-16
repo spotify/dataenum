@@ -252,6 +252,18 @@ if (message.isLogin()) {
   `Second_dataenum`, it must of course be public.
     
 
+## Configuration
+
+DataEnum currently has a single configurable setting determining the visibility of constructors in
+generated code. Generally speaking, `private` is best as it ensures there is a single way of creating
+case instances (the generated static factory methods like `MyMessages.login(String, String)` above).
+However, for Android development, you want to keep the method count down to a minimum, and private
+constructors lead to synthetic constructors being generated, increasing the method count. Since that
+is an important use case for us, we've chosen the package-private as the default. This is configurable
+through adding a
+[`@ConstructorAccess`](https://javadoc.io/page/com.spotify.dataenum/dataenum/latest/com/spotify/dataenum/ConstructorAccess.html)
+annotation to a `package-info.java` file. See the javadocs for more information.
+
 ## Known weaknesses of DataEnum
 
 - While the generated classes are immutable, they do not enforce that parameters are immutable. It is up to users of
