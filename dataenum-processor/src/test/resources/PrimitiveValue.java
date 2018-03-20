@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class PrimitiveValue {
-  private PrimitiveValue() {
+  PrimitiveValue() {
   }
 
   public static PrimitiveValue value(int param1, boolean param2, float param3, double param4) {
@@ -60,7 +60,7 @@ public abstract class PrimitiveValue {
 
     private final double param4;
 
-    private Value(int param1, boolean param2, float param3, double param4) {
+    Value(int param1, boolean param2, float param3, double param4) {
       this.param1 = param1;
       this.param2 = param2;
       this.param3 = param3;

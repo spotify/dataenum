@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class NullableValue {
-  private NullableValue() {
+  NullableValue() {
   }
 
   public static NullableValue value(@Nonnull Object param1, @Nullable Object param2,
@@ -63,7 +63,7 @@ public abstract class NullableValue {
 
     private final Object param5;
 
-    private Value(Object param1, Object param2, Object param3, Object param4, Object param5) {
+    Value(Object param1, Object param2, Object param3, Object param4, Object param5) {
       this.param1 = checkNotNull(param1);
       this.param2 = param2;
       this.param3 = param3;

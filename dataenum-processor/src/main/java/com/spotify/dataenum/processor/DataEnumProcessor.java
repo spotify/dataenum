@@ -19,6 +19,7 @@
  */
 package com.spotify.dataenum.processor;
 
+import com.spotify.dataenum.ConstructorAccess;
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.DataenumUtils;
 import com.spotify.dataenum.processor.data.OutputSpec;
@@ -50,6 +51,9 @@ public class DataEnumProcessor extends AbstractProcessor {
     Filer filer = processingEnv.getFiler();
     Messager messager = processingEnv.getMessager();
 
+    AccessSelector accessSelector =
+        new AccessSelector(roundEnvironment.getElementsAnnotatedWith(ConstructorAccess.class));
+
     for (Element element : roundEnvironment.getElementsAnnotatedWith(DataEnum.class)) {
       try {
 
@@ -59,7 +63,10 @@ public class DataEnumProcessor extends AbstractProcessor {
         }
 
         OutputSpec outputSpec = OutputSpecFactory.create(spec);
-        TypeSpec outputTypeSpec = SpecTypeFactory.create(outputSpec);
+        TypeSpec outputTypeSpec =
+            SpecTypeFactory.create(
+                outputSpec,
+                accessSelector.accessModifierFor(outputSpec.outputClass().packageName()));
 
         JavaFile.Builder javaFileBuilder =
             JavaFile.builder(outputSpec.outputClass().packageName(), outputTypeSpec);

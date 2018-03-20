@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class RecursiveGenericValue<L, R> {
-  private RecursiveGenericValue() {
+  RecursiveGenericValue() {
   }
 
   public static <L, R> RecursiveGenericValue<L, R> branch(@Nonnull RecursiveGenericValue<L, R> left,
@@ -85,7 +85,7 @@ public abstract class RecursiveGenericValue<L, R> {
 
     private final RecursiveGenericValue<L, R> right;
 
-    private Branch(RecursiveGenericValue<L, R> left, RecursiveGenericValue<L, R> right) {
+    Branch(RecursiveGenericValue<L, R> left, RecursiveGenericValue<L, R> right) {
       this.left = checkNotNull(left);
       this.right = checkNotNull(right);
     }
@@ -145,7 +145,7 @@ public abstract class RecursiveGenericValue<L, R> {
   public static final class Left<L> extends RecursiveGenericValue<L, Object> {
     private final L value;
 
-    private Left(L value) {
+    Left(L value) {
       this.value = checkNotNull(value);
     }
 
@@ -197,7 +197,7 @@ public abstract class RecursiveGenericValue<L, R> {
   public static final class Right<R> extends RecursiveGenericValue<Object, R> {
     private final R value;
 
-    private Right(R value) {
+    Right(R value) {
       this.value = checkNotNull(value);
     }
 

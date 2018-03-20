@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class GenericValues<L, R extends Throwable> {
 
-  private GenericValues() {
+  GenericValues() {
   }
 
   public static <L, R extends Throwable> GenericValues<L, R> left(@Nonnull L other) {
@@ -103,7 +103,7 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     private final L other;
 
-    private Left(L other) {
+    Left(L other) {
       this.other = checkNotNull(other);
     }
 
@@ -162,7 +162,7 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     private final R error;
 
-    private Right(R error) {
+    Right(R error) {
       this.error = checkNotNull(error);
     }
 
@@ -221,7 +221,7 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     private final String s;
 
-    private Neither(String s) {
+    Neither(String s) {
       this.s = checkNotNull(s);
     }
 
@@ -282,7 +282,7 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     private final R two;
 
-    private Both(L one, R two) {
+    Both(L one, R two) {
       this.one = checkNotNull(one);
       this.two = checkNotNull(two);
     }

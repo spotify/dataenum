@@ -17,10 +17,12 @@
  * limitations under the License.
  * -/-/-
  */
-import javax.annotation.Generated;
+package hide.ctors;
 
-@Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class Empty {
-  Empty() {
-  }
+import com.spotify.dataenum.DataEnum;
+import com.spotify.dataenum.dataenum_case;
+
+@DataEnum
+interface PrivateConstructors_dataenum {
+  dataenum_case Value();
 }

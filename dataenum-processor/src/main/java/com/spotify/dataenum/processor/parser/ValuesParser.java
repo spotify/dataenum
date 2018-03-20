@@ -48,7 +48,9 @@ final class ValuesParser {
             .getMessager()
             .printMessage(
                 Kind.ERROR,
-                "Duplicate case name '" + value.name().toLowerCase() + "' - lower-case case names must be unique.",
+                "Duplicate case name '"
+                    + value.name().toLowerCase()
+                    + "' - lower-case case names must be unique.",
                 valueElement);
       }
 

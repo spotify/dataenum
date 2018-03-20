@@ -17,10 +17,14 @@
  * limitations under the License.
  * -/-/-
  */
-import javax.annotation.Generated;
+package com.spotify.dataenum;
 
-@Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class Empty {
-  Empty() {
-  }
+/** Defines the possible values for Java element access levels. */
+public enum Access {
+  // We cannot use javax.lang.model.element.Modifier, since it include non-access-related
+  // modifiers and doesn't include PACKAGE_PRIVATE
+  PUBLIC,
+  PROTECTED,
+  PRIVATE,
+  PACKAGE_PRIVATE;
 }

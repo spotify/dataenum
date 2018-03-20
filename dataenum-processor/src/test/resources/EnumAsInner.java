@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
 public abstract class EnumAsInner {
-  private EnumAsInner() {
+  EnumAsInner() {
   }
 
   public static EnumAsInner value() {
@@ -47,7 +47,7 @@ public abstract class EnumAsInner {
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
   public static final class Value extends EnumAsInner {
-    private Value() {
+    Value() {
     }
 
     @Override

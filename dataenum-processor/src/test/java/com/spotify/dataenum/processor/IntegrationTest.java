@@ -24,16 +24,27 @@ import static com.google.testing.compile.Compiler.javac;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
+import java.util.ArrayList;
+import java.util.List;
+import javax.tools.JavaFileObject;
 import org.junit.Test;
 
 public class IntegrationTest {
 
-  private static void assertThatEnumGeneratedMatchingFile(String className) {
+  private static void assertThatEnumGeneratedMatchingFile(String className, String... extraFiles) {
+    List<JavaFileObject> files = new ArrayList<>(extraFiles.length + 1);
+
+    files.add(JavaFileObjects.forResource(className + "_dataenum.java"));
+
+    for (String file : extraFiles) {
+      files.add(JavaFileObjects.forResource(file));
+    }
+
     Compilation compilation =
         javac()
             .withOptions("-implicit:class")
             .withProcessors(new DataEnumProcessor())
-            .compile(JavaFileObjects.forResource(className + "_dataenum.java"));
+            .compile(files);
 
     assertThat(compilation).succeededWithoutWarnings();
     assertThat(compilation)
@@ -74,6 +85,11 @@ public class IntegrationTest {
   @Test
   public void genericValuesEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("GenericValues");
+  }
+
+  @Test
+  public void privateConstructors() throws Exception {
+    assertThatEnumGeneratedMatchingFile("hide/ctors/PrivateConstructors", "hide/package-info.java");
   }
 
   @Test

@@ -17,6 +17,8 @@
  * limitations under the License.
  * -/-/-
  */
+package hide.ctors;
+
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
 import java.lang.Object;
@@ -26,11 +28,11 @@ import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class EmptyValue {
-  EmptyValue() {
+public abstract class PrivateConstructors {
+  private PrivateConstructors() {
   }
 
-  public static EmptyValue value() {
+  public static PrivateConstructors value() {
     return new Value();
   }
 
@@ -46,8 +48,8 @@ public abstract class EmptyValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends EmptyValue {
-    Value() {
+  public static final class Value extends PrivateConstructors {
+    private Value() {
     }
 
     @Override

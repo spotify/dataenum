@@ -17,10 +17,9 @@
  * limitations under the License.
  * -/-/-
  */
-import javax.annotation.Generated;
+@ConstructorAccess(PRIVATE)
+package hide;
 
-@Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class Empty {
-  Empty() {
-  }
-}
+import static com.spotify.dataenum.Access.PRIVATE;
+
+import com.spotify.dataenum.ConstructorAccess;
