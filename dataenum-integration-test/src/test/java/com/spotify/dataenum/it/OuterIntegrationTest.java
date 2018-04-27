@@ -24,6 +24,7 @@ import static com.spotify.dataenum.function.Cases.todo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.spotify.dataenum.it.Testing.RedactedValue;
 import com.spotify.dataenum.it.Testing.Three;
 import com.spotify.dataenum.it.Testing.Two;
 import org.junit.Before;
@@ -41,7 +42,7 @@ public class OuterIntegrationTest {
   @Test
   public void shouldAllowMapping() throws Exception {
     // should compile and not show warnings
-    String s = t.map(one -> String.valueOf(one.i()), Two::s, Three::s);
+    String s = t.map(one -> String.valueOf(one.i()), Two::s, Three::s, RedactedValue::shouldShow);
 
     // use s to ensure this test class has zero warnings
     assertThat(s).isEqualTo("1");
@@ -49,21 +50,27 @@ public class OuterIntegrationTest {
 
   @Test
   public void shouldAllowConvenientTodoForMap() throws Exception {
-    assertThatThrownBy(() -> t.map(one -> todo(), Two::s, Three::s))
+    assertThatThrownBy(() -> t.map(one -> todo(), Two::s, Three::s, RedactedValue::shouldShow))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessageContaining("TODO");
   }
 
   @Test
   public void shouldAllowConvenientTodoForMatch() throws Exception {
-    assertThatThrownBy(() -> t.match(one -> todo(), two -> {}, three -> {}))
+    assertThatThrownBy(() -> t.match(one -> todo(), two -> {}, three -> {}, value -> {}))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessageContaining("TODO");
   }
 
   @Test
   public void shouldAllowConvenientIllegalStateForMap() throws Exception {
-    assertThatThrownBy(() -> t.map(one -> illegal("nono: " + one.i()), Two::s, Three::s))
+    assertThatThrownBy(
+            () ->
+                t.map(
+                    one -> illegal("nono: " + one.i()),
+                    Two::s,
+                    Three::s,
+                    RedactedValue::shouldShow))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("nono: 1");
   }
@@ -73,8 +80,18 @@ public class OuterIntegrationTest {
     assertThatThrownBy(
             () ->
                 t.match(
-                    one -> illegal("nope, should be: " + (one.i() + 1)), two -> {}, three -> {}))
+                    one -> illegal("nope, should be: " + (one.i() + 1)),
+                    two -> {},
+                    three -> {},
+                    value -> {}))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("nope, should be: 2");
+  }
+
+  @Test
+  public void shouldRedactAnnotatedFieldsInToString() {
+    assertThat(Testing.redactedValue("i want to see this", 866).toString())
+        .contains("i want to see this")
+        .doesNotContain("866");
   }
 }

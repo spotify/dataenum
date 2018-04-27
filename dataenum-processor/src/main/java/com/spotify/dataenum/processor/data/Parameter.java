@@ -25,11 +25,13 @@ public class Parameter {
   private final String name;
   private final TypeName type;
   private final boolean nullable;
+  private final boolean redacted;
 
-  public Parameter(String name, TypeName type, boolean nullable) {
+  public Parameter(String name, TypeName type, boolean nullable, boolean redacted) {
     this.name = name;
     this.type = type;
     this.nullable = nullable;
+    this.redacted = redacted;
   }
 
   public String name() {
@@ -42,5 +44,9 @@ public class Parameter {
 
   public boolean canBeNull() {
     return nullable;
+  }
+
+  public boolean redacted() {
+    return redacted;
   }
 }

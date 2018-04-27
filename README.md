@@ -250,7 +250,11 @@ if (message.isLogin()) {
   the `First` class doesn't exist until the annotation processor has run, so the `Second_dataenum` spec
   must reference the `First_dataenum` spec. If `First_dataenum` is in a different package than
   `Second_dataenum`, it must of course be public.
-    
+- If you have sensitive information in a field and don't want the generated `toString` method to 
+  print that information, you can use the `@Redacted` annotation:
+  ```java
+  dataenum_case UserInfo(String name, @Redacted String password);
+  ```    
 
 ## Configuration
 
