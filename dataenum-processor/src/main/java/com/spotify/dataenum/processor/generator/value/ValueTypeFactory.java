@@ -267,11 +267,17 @@ public class ValueTypeFactory {
     for (Parameter parameter : value.parameters()) {
       String fieldName = parameter.name();
 
+      String valueFormat = parameter.redacted() ? "\"***\"" : "$1L";
+
       if (first) {
         first = false;
-        result.addStatement("builder.append(\"$2L{$1N=\").append($1L)", fieldName, value.name());
+        result.addStatement(
+            String.format("builder.append(\"$2L{$1N=\").append(%s)", valueFormat),
+            fieldName,
+            value.name());
       } else {
-        result.addStatement("builder.append(\", $1N=\").append($1L)", fieldName);
+        result.addStatement(
+            String.format("builder.append(\", $1N=\").append(%s)", valueFormat), fieldName);
       }
     }
 

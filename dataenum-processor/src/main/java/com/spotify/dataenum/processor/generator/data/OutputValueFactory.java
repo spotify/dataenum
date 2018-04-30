@@ -52,7 +52,9 @@ final class OutputValueFactory {
       if (isDataEnumParameter(rawParamType)) {
         TypeName paramOutputType =
             withParametersFromOther(toOutputClass(rawParamType), parameter.type());
-        parameters.add(new Parameter(parameter.name(), paramOutputType, parameter.canBeNull()));
+        parameters.add(
+            new Parameter(
+                parameter.name(), paramOutputType, parameter.canBeNull(), parameter.redacted()));
       } else {
         parameters.add(parameter);
       }

@@ -19,7 +19,9 @@
  */
 package com.spotify.dataenum.processor.parser;
 
+import com.spotify.dataenum.Redacted;
 import com.spotify.dataenum.dataenum_case;
+import com.spotify.dataenum.function.Function;
 import com.spotify.dataenum.processor.data.Parameter;
 import com.spotify.dataenum.processor.data.Value;
 import com.squareup.javapoet.TypeName;
@@ -87,19 +89,36 @@ final class ValueParser {
       String parameterName = parameterElement.getSimpleName().toString();
       TypeName parameterType = TypeName.get(parameterElement.asType());
 
-      boolean nullable = false;
-      for (AnnotationMirror annotation : parameterElement.getAnnotationMirrors()) {
-        if (isNullableAnnotation(annotation)) {
-          nullable = true;
-          break;
-        }
-      }
+      boolean nullable = isAnnotationPresent(parameterElement, ValueParser::isNullableAnnotation);
+      boolean redacted =
+          isAnnotationPresent(parameterElement, ValueParser.isRedactedAnnotation(processingEnv));
 
-      parameters.add(new Parameter(parameterName, parameterType, nullable));
+      parameters.add(new Parameter(parameterName, parameterType, nullable, redacted));
     }
 
     String valueSimpleName = methodElement.getSimpleName().toString();
     return new Value(valueSimpleName, parameters);
+  }
+
+  private static Function<AnnotationMirror, Boolean> isRedactedAnnotation(
+      ProcessingEnvironment processingEnv) {
+    final Types types = processingEnv.getTypeUtils();
+    final Elements elements = processingEnv.getElementUtils();
+
+    return annotationMirror ->
+        types.isSameType(
+            annotationMirror.getAnnotationType(),
+            elements.getTypeElement(Redacted.class.getCanonicalName()).asType());
+  }
+
+  private static boolean isAnnotationPresent(
+      VariableElement parameterElement, Function<AnnotationMirror, Boolean> criterion) {
+    for (AnnotationMirror annotation : parameterElement.getAnnotationMirrors()) {
+      if (criterion.apply(annotation)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static boolean isValueSpecMarker(

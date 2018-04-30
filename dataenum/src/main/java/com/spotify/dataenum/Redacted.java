@@ -17,20 +17,17 @@
  * limitations under the License.
  * -/-/-
  */
-package com.spotify.dataenum.it;
+package com.spotify.dataenum;
 
-import com.spotify.dataenum.DataEnum;
-import com.spotify.dataenum.Redacted;
-import com.spotify.dataenum.dataenum_case;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/** For use in integration-type tests. */
-@DataEnum
-interface Testing_dataenum {
-  dataenum_case One(int i);
-
-  dataenum_case Two(String s);
-
-  dataenum_case Three(String s);
-
-  dataenum_case RedactedValue(String shouldShow, @Redacted Integer redacted);
-}
+/**
+ * Marks a dataenum field for redaction, meaning that the generated toString() method for that case
+ * will not output the contents of that field.
+ */
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.PARAMETER)
+public @interface Redacted {}
