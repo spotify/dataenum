@@ -66,7 +66,8 @@ public class DataEnumProcessor extends AbstractProcessor {
         TypeSpec outputTypeSpec =
             SpecTypeFactory.create(
                 outputSpec,
-                accessSelector.accessModifierFor(outputSpec.outputClass().packageName()));
+                accessSelector.accessModifierFor(outputSpec.outputClass().packageName()),
+                element);
 
         JavaFile.Builder javaFileBuilder =
             JavaFile.builder(outputSpec.outputClass().packageName(), outputTypeSpec);

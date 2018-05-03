@@ -38,13 +38,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 public final class SpecTypeFactory {
 
   private SpecTypeFactory() {}
 
-  public static TypeSpec create(OutputSpec spec, Optional<Modifier> constructorAccessModifier)
+  public static TypeSpec create(
+      OutputSpec spec, Optional<Modifier> constructorAccessModifier, Element element)
       throws ParserException {
     List<TypeSpec> valueTypes = new ArrayList<>();
     List<MethodSpec> factoryMethods = new ArrayList<>();
@@ -67,6 +69,7 @@ public final class SpecTypeFactory {
 
     TypeSpec.Builder enumBuilder =
         TypeSpec.classBuilder(spec.outputClass())
+            .addOriginatingElement(element)
             .addAnnotation(
                 AnnotationSpec.builder(Generated.class)
                     .addMember(
