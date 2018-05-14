@@ -92,8 +92,12 @@ final class ValueParser {
       boolean nullable = isAnnotationPresent(parameterElement, ValueParser::isNullableAnnotation);
       boolean redacted =
           isAnnotationPresent(parameterElement, ValueParser.isRedactedAnnotation(processingEnv));
+      Element parameterTypeElement =
+          processingEnv.getTypeUtils().asElement(parameterElement.asType());
+      boolean isEnum =
+          parameterTypeElement != null && parameterTypeElement.getKind() == ElementKind.ENUM;
 
-      parameters.add(new Parameter(parameterName, parameterType, nullable, redacted));
+      parameters.add(new Parameter(parameterName, parameterType, nullable, redacted, isEnum));
     }
 
     String valueSimpleName = methodElement.getSimpleName().toString();

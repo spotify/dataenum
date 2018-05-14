@@ -54,7 +54,11 @@ final class OutputValueFactory {
             withParametersFromOther(toOutputClass(rawParamType), parameter.type());
         parameters.add(
             new Parameter(
-                parameter.name(), paramOutputType, parameter.canBeNull(), parameter.redacted()));
+                parameter.name(),
+                paramOutputType,
+                parameter.canBeNull(),
+                parameter.redacted(),
+                false));
       } else {
         parameters.add(parameter);
       }

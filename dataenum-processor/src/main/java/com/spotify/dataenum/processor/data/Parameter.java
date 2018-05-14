@@ -26,12 +26,14 @@ public class Parameter {
   private final TypeName type;
   private final boolean nullable;
   private final boolean redacted;
+  private final boolean isEnum;
 
-  public Parameter(String name, TypeName type, boolean nullable, boolean redacted) {
+  public Parameter(String name, TypeName type, boolean nullable, boolean redacted, boolean isEnum) {
     this.name = name;
     this.type = type;
     this.nullable = nullable;
     this.redacted = redacted;
+    this.isEnum = isEnum;
   }
 
   public String name() {
@@ -48,5 +50,9 @@ public class Parameter {
 
   public boolean redacted() {
     return redacted;
+  }
+
+  public boolean isEnum() {
+    return isEnum;
   }
 }

@@ -93,6 +93,11 @@ public class IntegrationTest {
   }
 
   @Test
+  public void efficientEquals() throws Exception {
+    assertThatEnumGeneratedMatchingFile("EfficientEquals", "MyEnum.java");
+  }
+
+  @Test
   public void genericValuesGeneratedCodeCompiles() throws Exception {
     Compilation compilation =
         javac()
