@@ -25,8 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.TypeName;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.Test;
 
 public class OutputSpecFactoryTest {
@@ -34,32 +32,14 @@ public class OutputSpecFactoryTest {
   @Test
   public void shouldRemoveDataEnumInterfaceSuffix() throws Exception {
     assertThat(
-        OutputSpecFactory.toOutputClass((ClassName) ClassName.get("com.spotify", "My_dataenum")),
+        OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My_dataenum")),
         is(ClassName.get("com.spotify", "My")));
   }
 
   @Test
   public void shouldThrowForNonDataenumClassName() throws Exception {
-    assertThatThrownBy(
-            new ThrowingCallable() {
-              @Override
-              public void call() throws Throwable {
-                OutputSpecFactory.toOutputClass((ClassName) ClassName.get("com.spotify", "My"));
-              }
-            })
+    assertThatThrownBy(() -> OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My")))
         .isInstanceOf(ParserException.class)
         .hasMessageContaining("Bad name");
-  }
-
-  @Test
-  public void shouldThrowForNonClassName() throws Exception {
-    assertThatThrownBy(
-            new ThrowingCallable() {
-              @Override
-              public void call() throws Throwable {
-                OutputSpecFactory.toOutputClass((ClassName) TypeName.BOOLEAN);
-              }
-            })
-        .isInstanceOf(ClassCastException.class);
   }
 }
