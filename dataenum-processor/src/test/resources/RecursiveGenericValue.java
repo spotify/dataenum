@@ -113,8 +113,7 @@ public abstract class RecursiveGenericValue<L, R> {
     public int hashCode() {
       int result = 0;
       result = result * 31 + left.hashCode();
-      result = result * 31 + right.hashCode();
-      return result;
+      return result * 31 + right.hashCode();
     }
 
     @Override
@@ -165,8 +164,7 @@ public abstract class RecursiveGenericValue<L, R> {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + value.hashCode();
-      return result;
+      return result * 31 + value.hashCode();
     }
 
     @Override
@@ -217,8 +215,7 @@ public abstract class RecursiveGenericValue<L, R> {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + value.hashCode();
-      return result;
+      return result * 31 + value.hashCode();
     }
 
     @Override

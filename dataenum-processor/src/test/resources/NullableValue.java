@@ -115,8 +115,7 @@ public abstract class NullableValue {
       result = result * 31 + (param2 != null ? param2.hashCode() : 0);
       result = result * 31 + (param3 != null ? param3.hashCode() : 0);
       result = result * 31 + param4.hashCode();
-      result = result * 31 + param5.hashCode();
-      return result;
+      return result * 31 + param5.hashCode();
     }
 
     @Override

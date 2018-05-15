@@ -17,11 +17,13 @@
  * limitations under the License.
  * -/-/-
  */
-import static com.spotify.dataenum.DataenumUtils.checkNotNull;
 
+import static com.spotify.dataenum.DataenumUtils.checkNotNull;
 
 import com.spotify.dataenum.function.Consumer;
 import com.spotify.dataenum.function.Function;
+import java.lang.Double;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -30,12 +32,12 @@ import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class RecursiveValue {
-  RecursiveValue() {
+public abstract class EfficientEquals {
+  EfficientEquals() {
   }
 
-  public static RecursiveValue value(@Nonnull RecursiveValue child) {
-    return new Value(child);
+  public static EfficientEquals value(int param1, @Nonnull String param2, @Nonnull MyEnum param3, double param4) {
+    return new Value(param1, param2, param3, param4);
   }
 
   public final boolean isValue() {
@@ -50,16 +52,38 @@ public abstract class RecursiveValue {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends RecursiveValue {
-    private final RecursiveValue child;
+  public static final class Value extends EfficientEquals {
+    private final int param1;
 
-    Value(RecursiveValue child) {
-      this.child = checkNotNull(child);
+    private final String param2;
+
+    private final MyEnum param3;
+
+    private final double param4;
+
+    Value(int param1, String param2, MyEnum param3, double param4) {
+      this.param1 = param1;
+      this.param2 = checkNotNull(param2);
+      this.param3 = checkNotNull(param3);
+      this.param4 = param4;
+    }
+
+    public final int param1() {
+      return param1;
     }
 
     @Nonnull
-    public final RecursiveValue child() {
-      return child;
+    public final String param2() {
+      return param2;
+    }
+
+    @Nonnull
+    public final MyEnum param3() {
+      return param3;
+    }
+
+    public final double param4() {
+      return param4;
     }
 
     @Override
@@ -67,19 +91,28 @@ public abstract class RecursiveValue {
       if (other == this) return true;
       if (!(other instanceof Value)) return false;
       Value o = (Value) other;
-      return o.child.equals(this.child);
+      return o.param1 == param1
+          && o.param3 == param3
+          && o.param4 == param4
+          && o.param2.equals(this.param2);
     }
 
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + child.hashCode();
+      result = result * 31 + Integer.valueOf(param1).hashCode();
+      result = result * 31 + param2.hashCode();
+      result = result * 31 + param3.hashCode();
+      return result * 31 + Double.valueOf(param4).hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value{child=").append(child);
+      builder.append("Value{param1=").append(param1);
+      builder.append(", param2=").append(param2);
+      builder.append(", param3=").append(param3);
+      builder.append(", param4=").append(param4);
       return builder.append('}').toString();
     }
 

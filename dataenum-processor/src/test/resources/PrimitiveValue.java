@@ -100,8 +100,7 @@ public abstract class PrimitiveValue {
       result = result * 31 + Integer.valueOf(param1).hashCode();
       result = result * 31 + Boolean.valueOf(param2).hashCode();
       result = result * 31 + Float.valueOf(param3).hashCode();
-      result = result * 31 + Double.valueOf(param4).hashCode();
-      return result;
+      return result * 31 + Double.valueOf(param4).hashCode();
     }
 
     @Override

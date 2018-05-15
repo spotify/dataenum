@@ -51,10 +51,14 @@ final class OutputValueFactory {
 
       if (isDataEnumParameter(rawParamType)) {
         TypeName paramOutputType =
-            withParametersFromOther(toOutputClass(rawParamType), parameter.type());
+            withParametersFromOther(toOutputClass((ClassName) rawParamType), parameter.type());
         parameters.add(
             new Parameter(
-                parameter.name(), paramOutputType, parameter.canBeNull(), parameter.redacted()));
+                parameter.name(),
+                paramOutputType,
+                parameter.canBeNull(),
+                parameter.redacted(),
+                false));
       } else {
         parameters.add(parameter);
       }
@@ -64,7 +68,8 @@ final class OutputValueFactory {
   }
 
   private static boolean isDataEnumParameter(TypeName rawParamType) {
-    return rawParamType.toString().endsWith(OutputSpecFactory.SUFFIX);
+    return rawParamType.toString().endsWith(OutputSpecFactory.SUFFIX)
+        && rawParamType instanceof ClassName;
   }
 
   private static Iterable<TypeVariableName> getTypeVariables(

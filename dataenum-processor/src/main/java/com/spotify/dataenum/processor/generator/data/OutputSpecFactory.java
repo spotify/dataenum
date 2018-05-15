@@ -25,7 +25,6 @@ import com.spotify.dataenum.processor.data.Spec;
 import com.spotify.dataenum.processor.data.Value;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.TypeName;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +47,7 @@ public final class OutputSpecFactory {
     return new OutputSpec(spec, outputClass, values);
   }
 
-  public static ClassName toOutputClass(TypeName dataEnumType) throws ParserException {
-    ClassName dataEnumClass = (ClassName) dataEnumType;
+  static ClassName toOutputClass(ClassName dataEnumClass) throws ParserException {
 
     String packageName = dataEnumClass.packageName();
     String name = dataEnumClass.simpleName();

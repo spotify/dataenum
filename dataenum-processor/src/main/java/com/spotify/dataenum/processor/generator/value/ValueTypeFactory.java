@@ -182,8 +182,20 @@ public class ValueTypeFactory {
     TypeName wildCardTypeName = withWildCardTypeParameters(value);
     result.addStatement("$1T o = ($1T) other", wildCardTypeName);
     result.addCode("$[return ");
-    boolean first = true;
+
+    List<Parameter> usingReferenceEquality = new ArrayList<>();
+    List<Parameter> usingEquals = new ArrayList<>();
+
     for (Parameter parameter : value.parameters()) {
+      if (useReferenceEquality(parameter)) {
+        usingReferenceEquality.add(parameter);
+      } else {
+        usingEquals.add(parameter);
+      }
+    }
+
+    boolean first = true;
+    for (Parameter parameter : usingReferenceEquality) {
       if (first) {
         first = false;
       } else {
@@ -191,19 +203,31 @@ public class ValueTypeFactory {
       }
 
       String fieldName = parameter.name();
-      if (parameter.type().isPrimitive()) {
-        result.addCode("o.$1L == $1L", fieldName);
+      result.addCode("o.$1L == $1L", fieldName);
+    }
+
+    for (Parameter parameter : usingEquals) {
+      if (first) {
+        first = false;
       } else {
-        if (parameter.canBeNull()) {
-          result.addCode("equal(o.$1L, this.$1L)", fieldName);
-        } else {
-          result.addCode("o.$1L.equals(this.$1L)", fieldName);
-        }
+        result.addCode("\n&& ");
+      }
+
+      String fieldName = parameter.name();
+      if (parameter.canBeNull()) {
+        result.addCode("equal(o.$1L, this.$1L)", fieldName);
+      } else {
+        result.addCode("o.$1L.equals(this.$1L)", fieldName);
       }
     }
+
     result.addCode(";\n$]");
 
     return result.build();
+  }
+
+  private static boolean useReferenceEquality(Parameter parameter) {
+    return parameter.isEnum() || parameter.type().isPrimitive();
   }
 
   private static TypeName withWildCardTypeParameters(OutputValue value) {
@@ -231,9 +255,19 @@ public class ValueTypeFactory {
     }
 
     result.addStatement("int result = 0");
+
+    int parameterCount = Iterables.sizeOf(value.parameters());
+    int parameterIndex = 0;
+
     for (Parameter parameter : value.parameters()) {
       String fieldName = parameter.name();
-      result.addCode("result = result * 31 + ");
+      parameterIndex++;
+
+      if (parameterIndex == parameterCount) {
+        result.addCode("return result * 31 + ");
+      } else {
+        result.addCode("result = result * 31 + ");
+      }
       if (parameter.type().isPrimitive()) {
         TypeName boxedType = parameter.type().box();
         result.addStatement("$T.valueOf($L).hashCode()", boxedType, fieldName);
@@ -245,7 +279,6 @@ public class ValueTypeFactory {
         }
       }
     }
-    result.addStatement("return result");
     return result.build();
   }
 
