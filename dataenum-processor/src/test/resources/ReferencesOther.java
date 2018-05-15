@@ -73,8 +73,7 @@ public abstract class ReferencesOther {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + other.hashCode();
-      return result;
+      return result * 31 + other.hashCode();
     }
 
     @Override

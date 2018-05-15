@@ -103,8 +103,7 @@ public abstract class EfficientEquals {
       result = result * 31 + Integer.valueOf(param1).hashCode();
       result = result * 31 + param2.hashCode();
       result = result * 31 + param3.hashCode();
-      result = result * 31 + Double.valueOf(param4).hashCode();
-      return result;
+      return result * 31 + Double.valueOf(param4).hashCode();
     }
 
     @Override

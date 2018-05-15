@@ -34,7 +34,7 @@ public class OutputSpecFactoryTest {
   @Test
   public void shouldRemoveDataEnumInterfaceSuffix() throws Exception {
     assertThat(
-        OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My_dataenum")),
+        OutputSpecFactory.toOutputClass((ClassName) ClassName.get("com.spotify", "My_dataenum")),
         is(ClassName.get("com.spotify", "My")));
   }
 
@@ -44,7 +44,7 @@ public class OutputSpecFactoryTest {
             new ThrowingCallable() {
               @Override
               public void call() throws Throwable {
-                OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My"));
+                OutputSpecFactory.toOutputClass((ClassName) ClassName.get("com.spotify", "My"));
               }
             })
         .isInstanceOf(ParserException.class)
@@ -57,7 +57,7 @@ public class OutputSpecFactoryTest {
             new ThrowingCallable() {
               @Override
               public void call() throws Throwable {
-                OutputSpecFactory.toOutputClass(TypeName.BOOLEAN);
+                OutputSpecFactory.toOutputClass((ClassName) TypeName.BOOLEAN);
               }
             })
         .isInstanceOf(ClassCastException.class);

@@ -93,8 +93,7 @@ public abstract class MultipleValues {
     public int hashCode() {
       int result = 0;
       result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      return result;
+      return result * 31 + Boolean.valueOf(param2).hashCode();
     }
 
     @Override
@@ -148,8 +147,7 @@ public abstract class MultipleValues {
     public int hashCode() {
       int result = 0;
       result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      return result;
+      return result * 31 + Boolean.valueOf(param2).hashCode();
     }
 
     @Override

@@ -255,9 +255,19 @@ public class ValueTypeFactory {
     }
 
     result.addStatement("int result = 0");
+
+    int parameterCount = Iterables.sizeOf(value.parameters());
+    int parameterIndex = 0;
+
     for (Parameter parameter : value.parameters()) {
       String fieldName = parameter.name();
-      result.addCode("result = result * 31 + ");
+      parameterIndex++;
+
+      if (parameterIndex == parameterCount) {
+        result.addCode("return result * 31 + ");
+      } else {
+        result.addCode("result = result * 31 + ");
+      }
       if (parameter.type().isPrimitive()) {
         TypeName boxedType = parameter.type().box();
         result.addStatement("$T.valueOf($L).hashCode()", boxedType, fieldName);
@@ -269,7 +279,6 @@ public class ValueTypeFactory {
         }
       }
     }
-    result.addStatement("return result");
     return result.build();
   }
 
