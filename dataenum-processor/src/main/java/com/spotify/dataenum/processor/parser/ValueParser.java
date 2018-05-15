@@ -19,7 +19,6 @@
  */
 package com.spotify.dataenum.processor.parser;
 
-import com.spotify.dataenum.Redacted;
 import com.spotify.dataenum.dataenum_case;
 import com.spotify.dataenum.function.Function;
 import com.spotify.dataenum.processor.data.Parameter;
@@ -90,8 +89,7 @@ final class ValueParser {
       TypeName parameterType = TypeName.get(parameterElement.asType());
 
       boolean nullable = isAnnotationPresent(parameterElement, ValueParser::isNullableAnnotation);
-      boolean redacted =
-          isAnnotationPresent(parameterElement, ValueParser.isRedactedAnnotation(processingEnv));
+      boolean redacted = isAnnotationPresent(parameterElement, ValueParser::isRedactedAnnotation);
       Element parameterTypeElement =
           processingEnv.getTypeUtils().asElement(parameterElement.asType());
       boolean isEnum =
@@ -102,17 +100,6 @@ final class ValueParser {
 
     String valueSimpleName = methodElement.getSimpleName().toString();
     return new Value(valueSimpleName, parameters);
-  }
-
-  private static Function<AnnotationMirror, Boolean> isRedactedAnnotation(
-      ProcessingEnvironment processingEnv) {
-    final Types types = processingEnv.getTypeUtils();
-    final Elements elements = processingEnv.getElementUtils();
-
-    return annotationMirror ->
-        types.isSameType(
-            annotationMirror.getAnnotationType(),
-            elements.getTypeElement(Redacted.class.getCanonicalName()).asType());
   }
 
   private static boolean isAnnotationPresent(
@@ -135,7 +122,11 @@ final class ValueParser {
   }
 
   private static boolean isNullableAnnotation(AnnotationMirror annotation) {
-    Element annotationElement = annotation.getAnnotationType().asElement();
-    return "Nullable".contentEquals(annotationElement.getSimpleName());
+    return "Nullable".contentEquals(annotation.getAnnotationType().asElement().getSimpleName());
+  }
+
+  private static boolean isRedactedAnnotation(AnnotationMirror annotationMirror) {
+    return "Redacted"
+        .contentEquals(annotationMirror.getAnnotationType().asElement().getSimpleName());
   }
 }
