@@ -94,4 +94,9 @@ public class OuterIntegrationTest {
         .contains("i want to see this")
         .doesNotContain("866");
   }
+
+  @Test
+  public void shouldSupportAnyRedactedAnnotation() {
+    assertThat(RedactedTesting.redactMe("hide this").toString()).doesNotContain("hide this");
+  }
 }

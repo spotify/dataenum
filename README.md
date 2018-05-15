@@ -255,6 +255,7 @@ if (message.isLogin()) {
   ```java
   dataenum_case UserInfo(String name, @Redacted String password);
   ```    
+  We provide an annotation in the runtime dependencies, but any annotation named `Redacted` will work.
 
 ## Configuration
 
