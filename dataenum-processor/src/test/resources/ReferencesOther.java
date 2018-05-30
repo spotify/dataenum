@@ -25,6 +25,7 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.StringBuilder;
+import java.util.Set;
 import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 import just.some.pkg.InPackage;
@@ -38,17 +39,45 @@ public abstract class ReferencesOther {
     return new Another(other);
   }
 
+  public static ReferencesOther typeParamAnother(@Nonnull Set<InPackage> others) {
+    return new TypeParamAnother(others);
+  }
+
+  public static ReferencesOther typeParamParamAnother(@Nonnull Set<Set<InPackage>> manyOthers) {
+    return new TypeParamParamAnother(manyOthers);
+  }
+
   public final boolean isAnother() {
     return (this instanceof Another);
+  }
+
+  public final boolean isTypeParamAnother() {
+    return (this instanceof TypeParamAnother);
+  }
+
+  public final boolean isTypeParamParamAnother() {
+    return (this instanceof TypeParamParamAnother);
   }
 
   public final Another asAnother() {
     return (Another) this;
   }
 
-  public abstract void match(@Nonnull Consumer<Another> another);
+  public final TypeParamAnother asTypeParamAnother() {
+    return (TypeParamAnother) this;
+  }
 
-  public abstract <R_> R_ map(@Nonnull Function<Another, R_> another);
+  public final TypeParamParamAnother asTypeParamParamAnother() {
+    return (TypeParamParamAnother) this;
+  }
+
+  public abstract void match(@Nonnull Consumer<Another> another,
+                             @Nonnull Consumer<TypeParamAnother> typeParamAnother,
+                             @Nonnull Consumer<TypeParamParamAnother> typeParamParamAnother);
+
+  public abstract <R_> R_ map(@Nonnull Function<Another, R_> another,
+                              @Nonnull Function<TypeParamAnother, R_> typeParamAnother,
+                              @Nonnull Function<TypeParamParamAnother, R_> typeParamParamAnother);
 
   public static final class Another extends ReferencesOther {
     private final InPackage other;
@@ -84,13 +113,113 @@ public abstract class ReferencesOther {
     }
 
     @Override
-    public final void match(@Nonnull Consumer<Another> another) {
+    public final void match(@Nonnull Consumer<Another> another,
+                            @Nonnull Consumer<TypeParamAnother> typeParamAnother,
+                            @Nonnull Consumer<TypeParamParamAnother> typeParamParamAnother) {
       another.accept(this);
     }
 
     @Override
-    public final <R_> R_ map(@Nonnull Function<Another, R_> another) {
+    public final <R_> R_ map(@Nonnull Function<Another, R_> another,
+                             @Nonnull Function<TypeParamAnother, R_> typeParamAnother,
+                             @Nonnull Function<TypeParamParamAnother, R_> typeParamParamAnother) {
       return another.apply(this);
+    }
+  }
+
+  public static final class TypeParamAnother extends ReferencesOther {
+    private final Set<InPackage> others;
+
+    TypeParamAnother(Set<InPackage> others) {
+      this.others = checkNotNull(others);
+    }
+
+    @Nonnull
+    public final Set<InPackage> others() {
+      return others;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (other == this) return true;
+      if (!(other instanceof TypeParamAnother)) return false;
+      TypeParamAnother o = (TypeParamAnother) other;
+      return o.others.equals(this.others);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = 0;
+      return result * 31 + others.hashCode();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("TypeParamAnother{others=").append(others);
+      return builder.append('}').toString();
+    }
+
+    @Override
+    public final void match(@Nonnull Consumer<Another> another,
+                            @Nonnull Consumer<TypeParamAnother> typeParamAnother,
+                            @Nonnull Consumer<TypeParamParamAnother> typeParamParamAnother) {
+      typeParamAnother.accept(this);
+    }
+
+    @Override
+    public final <R_> R_ map(@Nonnull Function<Another, R_> another,
+                             @Nonnull Function<TypeParamAnother, R_> typeParamAnother,
+                             @Nonnull Function<TypeParamParamAnother, R_> typeParamParamAnother) {
+      return typeParamAnother.apply(this);
+    }
+  }
+
+  public static final class TypeParamParamAnother extends ReferencesOther {
+    private final Set<Set<InPackage>> manyOthers;
+
+    TypeParamParamAnother(Set<Set<InPackage>> manyOthers) {
+      this.manyOthers = checkNotNull(manyOthers);
+    }
+
+    @Nonnull
+    public final Set<Set<InPackage>> manyOthers() {
+      return manyOthers;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (other == this) return true;
+      if (!(other instanceof TypeParamParamAnother)) return false;
+      TypeParamParamAnother o = (TypeParamParamAnother) other;
+      return o.manyOthers.equals(this.manyOthers);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = 0;
+      return result * 31 + manyOthers.hashCode();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("TypeParamParamAnother{manyOthers=").append(manyOthers);
+      return builder.append('}').toString();
+    }
+
+    @Override
+    public final void match(@Nonnull Consumer<Another> another,
+                            @Nonnull Consumer<TypeParamAnother> typeParamAnother,
+                            @Nonnull Consumer<TypeParamParamAnother> typeParamParamAnother) {
+      typeParamParamAnother.accept(this);
+    }
+
+    @Override
+    public final <R_> R_ map(@Nonnull Function<Another, R_> another,
+                             @Nonnull Function<TypeParamAnother, R_> typeParamAnother,
+                             @Nonnull Function<TypeParamParamAnother, R_> typeParamParamAnother) {
+      return typeParamParamAnother.apply(this);
     }
   }
 }

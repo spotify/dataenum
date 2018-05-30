@@ -19,8 +19,10 @@
  */
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.dataenum_case;
+import java.util.Set;
 
 @DataEnum
 interface RecursiveValue_dataenum {
   dataenum_case Value(RecursiveValue_dataenum child);
+  dataenum_case TypeParamValue(Set<RecursiveValue_dataenum> children);
 }

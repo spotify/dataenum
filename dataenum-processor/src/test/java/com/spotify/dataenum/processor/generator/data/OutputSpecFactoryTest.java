@@ -32,13 +32,14 @@ public class OutputSpecFactoryTest {
   @Test
   public void shouldRemoveDataEnumInterfaceSuffix() throws Exception {
     assertThat(
-        OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My_dataenum")),
+        OutputSpecFactory.toOutputClassName(ClassName.get("com.spotify", "My_dataenum")),
         is(ClassName.get("com.spotify", "My")));
   }
 
   @Test
   public void shouldThrowForNonDataenumClassName() throws Exception {
-    assertThatThrownBy(() -> OutputSpecFactory.toOutputClass(ClassName.get("com.spotify", "My")))
+    assertThatThrownBy(
+            () -> OutputSpecFactory.toOutputClassName(ClassName.get("com.spotify", "My")))
         .isInstanceOf(ParserException.class)
         .hasMessageContaining("Bad name");
   }

@@ -19,9 +19,12 @@
  */
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.dataenum_case;
+import java.util.Set;
 import just.some.pkg.InPackage_dataenum;
 
 @DataEnum
 interface ReferencesOther_dataenum {
   dataenum_case Another(InPackage_dataenum other);
+  dataenum_case TypeParamAnother(Set<InPackage_dataenum> others);
+  dataenum_case TypeParamParamAnother(Set<Set<InPackage_dataenum>> manyOthers);
 }
