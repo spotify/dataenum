@@ -118,6 +118,9 @@ final class OutputValueFactory {
         if (typeVariable.equals(typeArgument)) {
           return true;
         }
+        if (typeNeedsTypeVariable(typeArgument, typeVariable)) {
+          return true;
+        }
       }
     }
 
