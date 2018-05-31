@@ -19,7 +19,8 @@
  */
 package com.spotify.dataenum.processor.generator.data;
 
-import static com.spotify.dataenum.processor.generator.data.OutputSpecFactory.toOutputClass;
+import static com.spotify.dataenum.processor.generator.data.OutputSpecFactory.isSpecClassName;
+import static com.spotify.dataenum.processor.generator.data.OutputSpecFactory.toOutputClassName;
 
 import com.spotify.dataenum.processor.data.OutputValue;
 import com.spotify.dataenum.processor.data.Parameter;
@@ -47,29 +48,50 @@ final class OutputValueFactory {
 
     List<Parameter> parameters = new ArrayList<>();
     for (Parameter parameter : value.parameters()) {
-      TypeName rawParamType = withoutTypeParameters(parameter.type());
-
-      if (isDataEnumParameter(rawParamType)) {
-        TypeName paramOutputType =
-            withParametersFromOther(toOutputClass((ClassName) rawParamType), parameter.type());
-        parameters.add(
-            new Parameter(
-                parameter.name(),
-                paramOutputType,
-                parameter.canBeNull(),
-                parameter.redacted(),
-                false));
-      } else {
-        parameters.add(parameter);
-      }
+      parameters.add(parameterWithoutDataEnumSuffix(parameter));
     }
 
     return new OutputValue(outputClass, value.name(), parameters, typeVariables);
   }
 
-  private static boolean isDataEnumParameter(TypeName rawParamType) {
-    return rawParamType.toString().endsWith(OutputSpecFactory.SUFFIX)
-        && rawParamType instanceof ClassName;
+  private static Parameter parameterWithoutDataEnumSuffix(Parameter parameter)
+      throws ParserException {
+    return new Parameter(
+        parameter.name(),
+        typeWithoutDataEnumSuffixes(parameter.type()),
+        parameter.canBeNull(),
+        parameter.redacted(),
+        parameter.isEnum());
+  }
+
+  private static TypeName typeWithoutDataEnumSuffixes(TypeName typeName) throws ParserException {
+    if (typeName instanceof ParameterizedTypeName) {
+      ParameterizedTypeName paramTypeName = (ParameterizedTypeName) typeName;
+
+      ClassName outputClassName;
+      if (isSpecClassName(paramTypeName.rawType)) {
+        outputClassName = toOutputClassName(paramTypeName.rawType);
+      } else {
+        outputClassName = paramTypeName.rawType;
+      }
+
+      TypeName[] typeArgumentsArr = new TypeName[paramTypeName.typeArguments.size()];
+      for (int i = 0; i < typeArgumentsArr.length; i++) {
+        typeArgumentsArr[i] = typeWithoutDataEnumSuffixes(paramTypeName.typeArguments.get(i));
+      }
+
+      return ParameterizedTypeName.get(outputClassName, typeArgumentsArr);
+    }
+
+    if (typeName instanceof ClassName) {
+      ClassName className = (ClassName) typeName;
+      if (isSpecClassName(className)) {
+        return toOutputClassName(className);
+      }
+      return className;
+    }
+
+    return typeName;
   }
 
   private static Iterable<TypeVariableName> getTypeVariables(
@@ -96,6 +118,9 @@ final class OutputValueFactory {
         if (typeVariable.equals(typeArgument)) {
           return true;
         }
+        if (typeNeedsTypeVariable(typeArgument, typeVariable)) {
+          return true;
+        }
       }
     }
 
@@ -106,21 +131,5 @@ final class OutputValueFactory {
       }
     }
     return false;
-  }
-
-  private static TypeName withoutTypeParameters(TypeName typeName) {
-    if (typeName instanceof ParameterizedTypeName) {
-      return ((ParameterizedTypeName) typeName).rawType;
-    }
-    return typeName;
-  }
-
-  private static TypeName withParametersFromOther(ClassName className, TypeName other) {
-    if (other instanceof ParameterizedTypeName) {
-      List<TypeName> typeArguments = ((ParameterizedTypeName) other).typeArguments;
-      TypeName[] typeArgumentsArr = typeArguments.toArray(new TypeName[] {});
-      return ParameterizedTypeName.get(className, typeArgumentsArr);
-    }
-    return className;
   }
 }

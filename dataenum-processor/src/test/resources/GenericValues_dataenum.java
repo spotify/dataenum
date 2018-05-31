@@ -19,6 +19,7 @@
  */
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.dataenum_case;
+import java.util.Set;
 
 @DataEnum
 interface GenericValues_dataenum<L, R extends Throwable> {
@@ -26,4 +27,5 @@ interface GenericValues_dataenum<L, R extends Throwable> {
   dataenum_case Right(R error);
   dataenum_case Neither(String s);
   dataenum_case Both(L one, R two);
+  dataenum_case Wrapped(Set<Set<L>> setOfSetOfL);
 }

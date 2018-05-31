@@ -32,12 +32,12 @@ public final class OutputSpecFactory {
 
   private OutputSpecFactory() {}
 
-  static final String SUFFIX = "_dataenum";
+  private static final String SUFFIX = "_dataenum";
 
   public static OutputSpec create(Spec spec) throws ParserException {
     ClassName specClass = spec.specClass();
 
-    ClassName outputClass = toOutputClass(specClass);
+    ClassName outputClass = toOutputClassName(specClass);
 
     List<OutputValue> values = new ArrayList<>();
     for (Value value : spec.values()) {
@@ -47,12 +47,15 @@ public final class OutputSpecFactory {
     return new OutputSpec(spec, outputClass, values);
   }
 
-  static ClassName toOutputClass(ClassName dataEnumClass) throws ParserException {
+  static boolean isSpecClassName(ClassName specClassName) {
+    return specClassName.simpleName().endsWith(SUFFIX);
+  }
 
-    String packageName = dataEnumClass.packageName();
-    String name = dataEnumClass.simpleName();
+  static ClassName toOutputClassName(ClassName specClassName) throws ParserException {
+    String packageName = specClassName.packageName();
+    String name = specClassName.simpleName();
 
-    if (!name.endsWith(SUFFIX)) {
+    if (!isSpecClassName(specClassName)) {
       throw new ParserException(
           String.format(
               "Bad name for DataEnum interface! Name must end with '%s', found: %s", SUFFIX, name));
