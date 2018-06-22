@@ -19,8 +19,6 @@
  */
 package com.spotify.dataenum.processor.generator.spec;
 
-import static com.spotify.dataenum.processor.util.Iterables.fromOptional;
-
 import com.spotify.dataenum.processor.DataEnumProcessor;
 import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
@@ -30,23 +28,28 @@ import com.spotify.dataenum.processor.generator.value.ValueMethods;
 import com.spotify.dataenum.processor.generator.value.ValueTypeFactory;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.spotify.dataenum.processor.util.Iterables;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Generated;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
+
+import static com.spotify.dataenum.processor.util.Iterables.fromOptional;
 
 public final class SpecTypeFactory {
+
+  private static final String JAVA_8_GENERATED_ANNOTATION_CLASS_NAME = "javax.annotation.Generated";
+  private static final String JAVA_9_GENERATED_ANNOTATION_CLASS_NAME = "javax.annotation.processing.Generated";
 
   private SpecTypeFactory() {}
 
   public static TypeSpec create(
-      OutputSpec spec, Optional<Modifier> constructorAccessModifier, Element element)
+          OutputSpec spec, Optional<Modifier> constructorAccessModifier, Element element, Elements elements)
       throws ParserException {
     List<TypeSpec> valueTypes = new ArrayList<>();
     List<MethodSpec> factoryMethods = new ArrayList<>();
@@ -67,33 +70,45 @@ public final class SpecTypeFactory {
       asMethods.add(valueMethods.createAsMethod(spec));
     }
 
-    TypeSpec.Builder enumBuilder =
-        TypeSpec.classBuilder(spec.outputClass())
+    TypeSpec.Builder enumBuilder  = TypeSpec.classBuilder(spec.outputClass())
             .addOriginatingElement(element)
-            .addAnnotation(
-                AnnotationSpec.builder(Generated.class)
-                    .addMember(
-                        "value", CodeBlock.of("$S", DataEnumProcessor.class.getCanonicalName()))
-                    .build())
+            .addAnnotation(getAnnotationSpec(elements))
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-            .addTypeVariables(spec.typeVariables());
-
-    // add constructor with correct access
-    enumBuilder.addMethod(
-        MethodSpec.constructorBuilder()
-            .addModifiers(fromOptional(constructorAccessModifier))
-            .build());
-
-    enumBuilder.addTypes(valueTypes);
-    enumBuilder.addMethods(factoryMethods);
-    enumBuilder.addMethods(isMethods);
-    enumBuilder.addMethods(asMethods);
+            .addTypeVariables(spec.typeVariables())
+            .addMethod(
+              MethodSpec.constructorBuilder()
+                  .addModifiers(fromOptional(constructorAccessModifier))
+                  .build())
+            .addTypes(valueTypes)
+            .addMethods(factoryMethods)
+            .addMethods(isMethods)
+            .addMethods(asMethods);
 
     if (!Iterables.isEmpty(spec.outputValues())) {
-      enumBuilder.addMethod(matchMethods.createAbstractFoldVoidMethod());
-      enumBuilder.addMethod(mapMethods.createAbstractFoldMethod());
+      enumBuilder.addMethod(matchMethods.createAbstractFoldVoidMethod())
+              .addMethod(mapMethods.createAbstractFoldMethod());
     }
 
     return enumBuilder.build();
+  }
+
+  private static AnnotationSpec getAnnotationSpec(Elements elements) {
+    TypeElement generatedAnnotationElement = getGeneratedAnnotationType(elements);
+
+    if (generatedAnnotationElement == null) {
+      throw new IllegalStateException("Could not find javax.annotation.Generated or javax.annotation.processing.Generated. Do you have javax.annotation:jsr250-api:1.0 as a dependency?");
+    }
+
+    ClassName generatedName = ClassName.get(generatedAnnotationElement);
+    return AnnotationSpec.builder(generatedName)
+            .addMember("value", CodeBlock.of("$S", DataEnumProcessor.class.getCanonicalName()))
+            .build();
+  }
+
+  private static TypeElement getGeneratedAnnotationType(Elements elements) {
+    TypeElement typeElement = elements.getTypeElement(JAVA_8_GENERATED_ANNOTATION_CLASS_NAME);
+    if (typeElement != null) return typeElement;
+
+    return elements.getTypeElement(JAVA_9_GENERATED_ANNOTATION_CLASS_NAME);
   }
 }

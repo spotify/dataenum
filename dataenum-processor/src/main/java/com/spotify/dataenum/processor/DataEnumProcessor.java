@@ -42,6 +42,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
 public class DataEnumProcessor extends AbstractProcessor {
@@ -67,7 +68,8 @@ public class DataEnumProcessor extends AbstractProcessor {
             SpecTypeFactory.create(
                 outputSpec,
                 accessSelector.accessModifierFor(outputSpec.outputClass().packageName()),
-                element);
+                element,
+                processingEnv.getElementUtils());
 
         JavaFile.Builder javaFileBuilder =
             JavaFile.builder(outputSpec.outputClass().packageName(), outputTypeSpec);
