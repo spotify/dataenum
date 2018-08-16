@@ -110,12 +110,12 @@ public abstract class NullableValue {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      result = result * 31 + param1.hashCode();
-      result = result * 31 + (param2 != null ? param2.hashCode() : 0);
-      result = result * 31 + (param3 != null ? param3.hashCode() : 0);
-      result = result * 31 + param4.hashCode();
-      return result * 31 + param5.hashCode();
+      int _hash_result = 0;
+      _hash_result = _hash_result * 31 + param1.hashCode();
+      _hash_result = _hash_result * 31 + (param2 != null ? param2.hashCode() : 0);
+      _hash_result = _hash_result * 31 + (param3 != null ? param3.hashCode() : 0);
+      _hash_result = _hash_result * 31 + param4.hashCode();
+      return _hash_result * 31 + param5.hashCode();
     }
 
     @Override

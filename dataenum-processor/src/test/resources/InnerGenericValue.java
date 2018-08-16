@@ -100,8 +100,8 @@ public abstract class InnerGenericValue<T> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + values.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + values.hashCode();
     }
 
     @Override
@@ -150,8 +150,8 @@ public abstract class InnerGenericValue<T> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + value.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + value.hashCode();
     }
 
     @Override

@@ -130,8 +130,8 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + other.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + other.hashCode();
     }
 
     @Override
@@ -183,8 +183,8 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + error.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + error.hashCode();
     }
 
     @Override
@@ -237,8 +237,8 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + s.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + s.hashCode();
     }
 
     @Override
@@ -301,9 +301,9 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      result = result * 31 + one.hashCode();
-      return result * 31 + two.hashCode();
+      int _hash_result = 0;
+      _hash_result = _hash_result * 31 + one.hashCode();
+      return _hash_result * 31 + two.hashCode();
     }
 
     @Override
@@ -355,8 +355,8 @@ public abstract class GenericValues<L, R extends Throwable> {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + setOfSetOfL.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + setOfSetOfL.hashCode();
     }
 
     @Override

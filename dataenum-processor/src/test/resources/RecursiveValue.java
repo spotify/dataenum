@@ -86,8 +86,8 @@ public abstract class RecursiveValue {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + child.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + child.hashCode();
     }
 
     @Override
@@ -132,8 +132,8 @@ public abstract class RecursiveValue {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      return result * 31 + children.hashCode();
+      int _hash_result = 0;
+      return _hash_result * 31 + children.hashCode();
     }
 
     @Override

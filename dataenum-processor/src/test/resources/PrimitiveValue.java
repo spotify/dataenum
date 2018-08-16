@@ -96,11 +96,11 @@ public abstract class PrimitiveValue {
 
     @Override
     public int hashCode() {
-      int result = 0;
-      result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      result = result * 31 + Float.valueOf(param3).hashCode();
-      return result * 31 + Double.valueOf(param4).hashCode();
+      int _hash_result = 0;
+      _hash_result = _hash_result * 31 + Integer.valueOf(param1).hashCode();
+      _hash_result = _hash_result * 31 + Boolean.valueOf(param2).hashCode();
+      _hash_result = _hash_result * 31 + Float.valueOf(param3).hashCode();
+      return _hash_result * 31 + Double.valueOf(param4).hashCode();
     }
 
     @Override
