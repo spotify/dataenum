@@ -53,6 +53,11 @@ public class IntegrationTest {
   }
 
   @Test
+  public void conflictingFieldNames() throws Exception {
+    assertThatEnumGeneratedMatchingFile("ConflictingFieldNames");
+  }
+
+  @Test
   public void emptyEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("Empty");
   }

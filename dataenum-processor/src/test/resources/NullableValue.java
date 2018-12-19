@@ -111,21 +111,21 @@ public abstract class NullableValue {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + param1.hashCode();
-      result = result * 31 + (param2 != null ? param2.hashCode() : 0);
-      result = result * 31 + (param3 != null ? param3.hashCode() : 0);
-      result = result * 31 + param4.hashCode();
-      return result * 31 + param5.hashCode();
+      result = result * 31 + this.param1.hashCode();
+      result = result * 31 + (this.param2 != null ? this.param2.hashCode() : 0);
+      result = result * 31 + (this.param3 != null ? this.param3.hashCode() : 0);
+      result = result * 31 + this.param4.hashCode();
+      return result * 31 + this.param5.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value{param1=").append(param1);
-      builder.append(", param2=").append(param2);
-      builder.append(", param3=").append(param3);
-      builder.append(", param4=").append(param4);
-      builder.append(", param5=").append(param5);
+      builder.append("Value{param1=").append(this.param1);
+      builder.append(", param2=").append(this.param2);
+      builder.append(", param3=").append(this.param3);
+      builder.append(", param4=").append(this.param4);
+      builder.append(", param5=").append(this.param5);
       return builder.append('}').toString();
     }
 

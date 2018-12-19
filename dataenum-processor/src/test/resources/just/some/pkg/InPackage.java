@@ -81,15 +81,15 @@ public abstract class InPackage {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + Integer.valueOf(param1).hashCode();
-      return result * 31 + Boolean.valueOf(param2).hashCode();
+      result = result * 31 + Integer.valueOf(this.param1).hashCode();
+      return result * 31 + Boolean.valueOf(this.param2).hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value1{param1=").append(param1);
-      builder.append(", param2=").append(param2);
+      builder.append("Value1{param1=").append(this.param1);
+      builder.append(", param2=").append(this.param2);
       return builder.append('}').toString();
     }
 

@@ -87,13 +87,13 @@ public abstract class RecursiveValue {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + child.hashCode();
+      return result * 31 + this.child.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value{child=").append(child);
+      builder.append("Value{child=").append(this.child);
       return builder.append('}').toString();
     }
 
@@ -133,13 +133,13 @@ public abstract class RecursiveValue {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + children.hashCode();
+      return result * 31 + this.children.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("TypeParamValue{children=").append(children);
+      builder.append("TypeParamValue{children=").append(this.children);
       return builder.append('}').toString();
     }
 

@@ -270,12 +270,12 @@ public class ValueTypeFactory {
       }
       if (parameter.type().isPrimitive()) {
         TypeName boxedType = parameter.type().box();
-        result.addStatement("$T.valueOf($L).hashCode()", boxedType, fieldName);
+        result.addStatement("$T.valueOf(this.$L).hashCode()", boxedType, fieldName);
       } else {
         if (parameter.canBeNull()) {
-          result.addStatement("($1L != null ? $1L.hashCode() : 0)", fieldName);
+          result.addStatement("(this.$1L != null ? this.$1L.hashCode() : 0)", fieldName);
         } else {
-          result.addStatement("$L.hashCode()", fieldName);
+          result.addStatement("this.$L.hashCode()", fieldName);
         }
       }
     }
@@ -300,7 +300,7 @@ public class ValueTypeFactory {
     for (Parameter parameter : value.parameters()) {
       String fieldName = parameter.name();
 
-      String valueFormat = parameter.redacted() ? "\"***\"" : "$1L";
+      String valueFormat = parameter.redacted() ? "\"***\"" : "this.$1L";
 
       if (first) {
         first = false;
