@@ -102,13 +102,13 @@ public abstract class ReferencesOther {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + other.hashCode();
+      return result * 31 + this.other.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Another{other=").append(other);
+      builder.append("Another{other=").append(this.other);
       return builder.append('}').toString();
     }
 
@@ -150,13 +150,13 @@ public abstract class ReferencesOther {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + others.hashCode();
+      return result * 31 + this.others.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("TypeParamAnother{others=").append(others);
+      builder.append("TypeParamAnother{others=").append(this.others);
       return builder.append('}').toString();
     }
 
@@ -198,13 +198,13 @@ public abstract class ReferencesOther {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + manyOthers.hashCode();
+      return result * 31 + this.manyOthers.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("TypeParamParamAnother{manyOthers=").append(manyOthers);
+      builder.append("TypeParamParamAnother{manyOthers=").append(this.manyOthers);
       return builder.append('}').toString();
     }
 

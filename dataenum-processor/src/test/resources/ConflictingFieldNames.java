@@ -32,12 +32,12 @@ import javax.annotation.Generated;
 import javax.annotation.Nonnull;
 
 @Generated("com.spotify.dataenum.processor.DataEnumProcessor")
-public abstract class EfficientEquals {
-  EfficientEquals() {
+public abstract class ConflictingFieldNames {
+  ConflictingFieldNames() {
   }
 
-  public static EfficientEquals value(int param1, @Nonnull String param2, @Nonnull MyEnum param3, double param4) {
-    return new Value(param1, param2, param3, param4);
+  public static ConflictingFieldNames value(int result, @Nonnull String builder, @Nonnull MyEnum param3, double param4) {
+    return new Value(result, builder, param3, param4);
   }
 
   public final boolean isValue() {
@@ -52,29 +52,29 @@ public abstract class EfficientEquals {
 
   public abstract <R_> R_ map(@Nonnull Function<Value, R_> value);
 
-  public static final class Value extends EfficientEquals {
-    private final int param1;
+  public static final class Value extends ConflictingFieldNames {
+    private final int result;
 
-    private final String param2;
+    private final String builder;
 
     private final MyEnum param3;
 
     private final double param4;
 
-    Value(int param1, String param2, MyEnum param3, double param4) {
-      this.param1 = param1;
-      this.param2 = checkNotNull(param2);
+    Value(int result, String builder, MyEnum param3, double param4) {
+      this.result = result;
+      this.builder = checkNotNull(builder);
       this.param3 = checkNotNull(param3);
       this.param4 = param4;
     }
 
-    public final int param1() {
-      return param1;
+    public final int result() {
+      return result;
     }
 
     @Nonnull
-    public final String param2() {
-      return param2;
+    public final String builder() {
+      return builder;
     }
 
     @Nonnull
@@ -91,17 +91,17 @@ public abstract class EfficientEquals {
       if (other == this) return true;
       if (!(other instanceof Value)) return false;
       Value o = (Value) other;
-      return o.param1 == param1
+      return o.result == result
           && o.param3 == param3
           && o.param4 == param4
-          && o.param2.equals(this.param2);
+          && o.builder.equals(this.builder);
     }
 
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + Integer.valueOf(this.param1).hashCode();
-      result = result * 31 + this.param2.hashCode();
+      result = result * 31 + Integer.valueOf(this.result).hashCode();
+      result = result * 31 + this.builder.hashCode();
       result = result * 31 + this.param3.hashCode();
       return result * 31 + Double.valueOf(this.param4).hashCode();
     }
@@ -109,8 +109,8 @@ public abstract class EfficientEquals {
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value{param1=").append(this.param1);
-      builder.append(", param2=").append(this.param2);
+      builder.append("Value{result=").append(this.result);
+      builder.append(", builder=").append(this.builder);
       builder.append(", param3=").append(this.param3);
       builder.append(", param4=").append(this.param4);
       return builder.append('}').toString();

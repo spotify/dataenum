@@ -97,19 +97,19 @@ public abstract class PrimitiveValue {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + Integer.valueOf(param1).hashCode();
-      result = result * 31 + Boolean.valueOf(param2).hashCode();
-      result = result * 31 + Float.valueOf(param3).hashCode();
-      return result * 31 + Double.valueOf(param4).hashCode();
+      result = result * 31 + Integer.valueOf(this.param1).hashCode();
+      result = result * 31 + Boolean.valueOf(this.param2).hashCode();
+      result = result * 31 + Float.valueOf(this.param3).hashCode();
+      return result * 31 + Double.valueOf(this.param4).hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Value{param1=").append(param1);
-      builder.append(", param2=").append(param2);
-      builder.append(", param3=").append(param3);
-      builder.append(", param4=").append(param4);
+      builder.append("Value{param1=").append(this.param1);
+      builder.append(", param2=").append(this.param2);
+      builder.append(", param3=").append(this.param3);
+      builder.append(", param4=").append(this.param4);
       return builder.append('}').toString();
     }
 

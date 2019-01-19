@@ -131,13 +131,13 @@ public abstract class GenericValues<L, R extends Throwable> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + other.hashCode();
+      return result * 31 + this.other.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Left{other=").append(other);
+      builder.append("Left{other=").append(this.other);
       return builder.append('}').toString();
     }
 
@@ -184,13 +184,13 @@ public abstract class GenericValues<L, R extends Throwable> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + error.hashCode();
+      return result * 31 + this.error.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Right{error=").append(error);
+      builder.append("Right{error=").append(this.error);
       return builder.append('}').toString();
     }
 
@@ -238,13 +238,13 @@ public abstract class GenericValues<L, R extends Throwable> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + s.hashCode();
+      return result * 31 + this.s.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Neither{s=").append(s);
+      builder.append("Neither{s=").append(this.s);
       return builder.append('}').toString();
     }
 
@@ -302,15 +302,15 @@ public abstract class GenericValues<L, R extends Throwable> {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + one.hashCode();
-      return result * 31 + two.hashCode();
+      result = result * 31 + this.one.hashCode();
+      return result * 31 + this.two.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Both{one=").append(one);
-      builder.append(", two=").append(two);
+      builder.append("Both{one=").append(this.one);
+      builder.append(", two=").append(this.two);
       return builder.append('}').toString();
     }
 
@@ -356,13 +356,13 @@ public abstract class GenericValues<L, R extends Throwable> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + setOfSetOfL.hashCode();
+      return result * 31 + this.setOfSetOfL.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Wrapped{setOfSetOfL=").append(setOfSetOfL);
+      builder.append("Wrapped{setOfSetOfL=").append(this.setOfSetOfL);
       return builder.append('}').toString();
     }
 

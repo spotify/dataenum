@@ -112,15 +112,15 @@ public abstract class RecursiveGenericValue<L, R> {
     @Override
     public int hashCode() {
       int result = 0;
-      result = result * 31 + left.hashCode();
-      return result * 31 + right.hashCode();
+      result = result * 31 + this.left.hashCode();
+      return result * 31 + this.right.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Branch{left=").append(left);
-      builder.append(", right=").append(right);
+      builder.append("Branch{left=").append(this.left);
+      builder.append(", right=").append(this.right);
       return builder.append('}').toString();
     }
 
@@ -164,13 +164,13 @@ public abstract class RecursiveGenericValue<L, R> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + value.hashCode();
+      return result * 31 + this.value.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Left{value=").append(value);
+      builder.append("Left{value=").append(this.value);
       return builder.append('}').toString();
     }
 
@@ -215,13 +215,13 @@ public abstract class RecursiveGenericValue<L, R> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + value.hashCode();
+      return result * 31 + this.value.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Right{value=").append(value);
+      builder.append("Right{value=").append(this.value);
       return builder.append('}').toString();
     }
 

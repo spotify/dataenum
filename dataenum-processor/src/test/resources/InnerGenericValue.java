@@ -101,13 +101,13 @@ public abstract class InnerGenericValue<T> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + values.hashCode();
+      return result * 31 + this.values.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("Many{values=").append(values);
+      builder.append("Many{values=").append(this.values);
       return builder.append('}').toString();
     }
 
@@ -151,13 +151,13 @@ public abstract class InnerGenericValue<T> {
     @Override
     public int hashCode() {
       int result = 0;
-      return result * 31 + value.hashCode();
+      return result * 31 + this.value.hashCode();
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("One{value=").append(value);
+      builder.append("One{value=").append(this.value);
       return builder.append('}').toString();
     }
 
