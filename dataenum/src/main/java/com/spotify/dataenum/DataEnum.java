@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * <p>To be used together with the dataenum-processor annotation processor.
  *
  * <p>This annotation must be used on a package private interface, and the interface name must end
- * with '_dataenum'. For each value of the enum, declare a method with {@link dataenum_value} as the
+ * with '_dataenum'. For each value of the enum, declare a method with {@link dataenum_case} as the
  * return type. The name of the method will be used as the name of the value type, and the arguments
  * of the method will be the data associated with the value.
  *
@@ -46,9 +46,9 @@ import java.lang.annotation.Target;
  * <pre>
  * &#64;DataEnum
  * interface MyData_dataenum {
- *   dataenum_value Foo(int justANumber, String stringThatCannotBeNull);
- *   dataenum_value Bar(&#64;Nullable String thisStringCanBeNull);
- *   dataenum_value Baz(); // no data associated with this value
+ *   dataenum_case Foo(int justANumber, String stringThatCannotBeNull);
+ *   dataenum_case Bar(&#64;Nullable String thisStringCanBeNull);
+ *   dataenum_case Baz(); // no data associated with this value
  * }
  * </pre>
  */
