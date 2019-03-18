@@ -149,6 +149,11 @@ public class IntegrationTest {
   }
 
   @Test
+  public void redactedStrings() throws Exception {
+    assertThatEnumGeneratedMatchingFile("Redacted");
+  }
+
+  @Test
   public void referenceOtherDataenum() throws Exception {
     Compilation compilation =
         javac()
