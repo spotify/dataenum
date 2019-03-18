@@ -30,6 +30,7 @@ import com.spotify.dataenum.processor.generator.data.OutputSpecFactory;
 import com.spotify.dataenum.processor.generator.spec.SpecTypeFactory;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.spotify.dataenum.processor.parser.SpecParser;
+import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import java.io.IOException;
@@ -113,7 +114,9 @@ public class DataEnumProcessor extends AbstractProcessor {
   private static boolean needsNullSafeEquals(Spec enumDef) {
     for (Value value : enumDef.values()) {
       for (Parameter parameter : value.parameters()) {
-        if (!parameter.type().isPrimitive() && parameter.canBeNull()) {
+        if (!parameter.type().isPrimitive()
+            && !(parameter.type() instanceof ArrayTypeName)
+            && parameter.canBeNull()) {
           return true;
         }
       }

@@ -29,6 +29,8 @@ import com.spotify.dataenum.processor.generator.match.MatchMethods;
 import com.spotify.dataenum.processor.parser.ParserException;
 import com.spotify.dataenum.processor.util.Iterables;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ArrayTypeName;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
@@ -184,10 +186,13 @@ public class ValueTypeFactory {
     result.addCode("$[return ");
 
     List<Parameter> usingReferenceEquality = new ArrayList<>();
+    List<Parameter> usingArraysEquality = new ArrayList<>();
     List<Parameter> usingEquals = new ArrayList<>();
 
     for (Parameter parameter : value.parameters()) {
-      if (useReferenceEquality(parameter)) {
+      if (isArrayType(parameter)) {
+        usingArraysEquality.add(parameter);
+      } else if (useReferenceEquality(parameter)) {
         usingReferenceEquality.add(parameter);
       } else {
         usingEquals.add(parameter);
@@ -204,6 +209,16 @@ public class ValueTypeFactory {
 
       String fieldName = parameter.name();
       result.addCode("o.$1L == $1L", fieldName);
+    }
+
+    for (Parameter parameter : usingArraysEquality) {
+      if (first) {
+        first = false;
+      } else {
+        result.addCode("\n&& ");
+      }
+
+      result.addCode("$1T.equals(o.$2L, $2L)", ClassName.get(Arrays.class), parameter.name());
     }
 
     for (Parameter parameter : usingEquals) {
@@ -271,6 +286,8 @@ public class ValueTypeFactory {
       if (parameter.type().isPrimitive()) {
         TypeName boxedType = parameter.type().box();
         result.addStatement("$T.valueOf(this.$L).hashCode()", boxedType, fieldName);
+      } else if (isArrayType(parameter)) {
+        result.addStatement("$T.hashCode(this.$L)", ClassName.get(Arrays.class), fieldName);
       } else {
         if (parameter.canBeNull()) {
           result.addStatement("(this.$1L != null ? this.$1L.hashCode() : 0)", fieldName);
@@ -280,6 +297,10 @@ public class ValueTypeFactory {
       }
     }
     return result.build();
+  }
+
+  private static boolean isArrayType(Parameter parameter) {
+    return parameter.type() instanceof ArrayTypeName;
   }
 
   private static MethodSpec createToString(OutputValue value) {
@@ -300,7 +321,15 @@ public class ValueTypeFactory {
     for (Parameter parameter : value.parameters()) {
       String fieldName = parameter.name();
 
-      String valueFormat = parameter.redacted() ? "\"***\"" : "this.$1L";
+      final String valueFormat;
+
+      if (parameter.redacted()) {
+        valueFormat = "\"***\"";
+      } else if (isArrayType(parameter)) {
+        valueFormat = "Arrays.toString(this.$1L)";
+      } else {
+        valueFormat = "this.$1L";
+      }
 
       if (first) {
         first = false;
