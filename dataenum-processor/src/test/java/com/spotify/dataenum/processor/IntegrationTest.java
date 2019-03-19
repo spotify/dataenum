@@ -144,6 +144,16 @@ public class IntegrationTest {
   }
 
   @Test
+  public void arrayFields() throws Exception {
+    assertThatEnumGeneratedMatchingFile("ArrayFields");
+  }
+
+  @Test
+  public void redactedStrings() throws Exception {
+    assertThatEnumGeneratedMatchingFile("Redacted");
+  }
+
+  @Test
   public void referenceOtherDataenum() throws Exception {
     Compilation compilation =
         javac()
