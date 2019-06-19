@@ -224,4 +224,19 @@ public class IntegrationTest {
     assertThat(compilation).hadErrorContaining("Duplicate case name 'value'");
     assertThat(compilation).hadErrorContaining("Duplicate case name 'caseisimportant'");
   }
+
+  @Test
+  public void shouldGenerateLinkToSourceAsJavadocComment() {
+    Compilation compilation =
+        javac()
+            .withOptions("-implicit:class")
+            .withProcessors(new DataEnumProcessor())
+            .compile(JavaFileObjects.forResource("ArrayFields_dataenum.java"));
+
+    assertThat(compilation).succeededWithoutWarnings();
+    assertThat(compilation)
+        .generatedSourceFile("ArrayFields")
+        .contentsAsUtf8String()
+        .contains(" * Generated from {@link ArrayFields_dataenum}");
+  }
 }
