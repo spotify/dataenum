@@ -231,12 +231,47 @@ public class IntegrationTest {
         javac()
             .withOptions("-implicit:class")
             .withProcessors(new DataEnumProcessor())
-            .compile(JavaFileObjects.forResource("ArrayFields_dataenum.java"));
+            .compile(JavaFileObjects.forResource("javadoc/Javadoc_dataenum.java"));
 
     assertThat(compilation).succeededWithoutWarnings();
     assertThat(compilation)
-        .generatedSourceFile("ArrayFields")
+        .generatedSourceFile("javadoc.Javadoc")
         .contentsAsUtf8String()
-        .contains(" * Generated from {@link ArrayFields_dataenum}");
+        .contains(" * Generated from {@link Javadoc_dataenum}");
+  }
+
+  @Test
+  public void shouldGenerateLinkToCaseSourceAsJavadocCommentOnFactoryMethod() {
+    Compilation compilation =
+        javac()
+            .withOptions("-implicit:class")
+            .withProcessors(new DataEnumProcessor())
+            .compile(JavaFileObjects.forResource("javadoc/Javadoc_dataenum.java"));
+
+    assertThat(compilation).succeededWithoutWarnings();
+    assertThat(compilation)
+        .generatedSourceFile("javadoc.Javadoc")
+        .contentsAsUtf8String()
+        .contains("   * @return a {@link Value} (see {@link Javadoc_dataenum#Value} for source)");
+  }
+
+  @Test
+  public void shouldCopyDocFromCaseSourceToJavadocCommentOnFactoryMethod() {
+    Compilation compilation =
+        javac()
+            .withOptions("-implicit:class")
+            .withProcessors(new DataEnumProcessor())
+            .compile(JavaFileObjects.forResource("javadoc/Javadoc_dataenum.java"));
+
+    assertThat(compilation).succeededWithoutWarnings();
+    assertThat(compilation)
+        .generatedSourceFile("javadoc.Javadoc")
+        .contentsAsUtf8String()
+        .contains(
+            "/**\n"
+                + "   * Some documentation about this case.\n"
+                + "   *\n"
+                + "   * @return a {@link Documented} (see {@link Javadoc_dataenum#Documented} for source)\n"
+                + "   */\n");
   }
 }

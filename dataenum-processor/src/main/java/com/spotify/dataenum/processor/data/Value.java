@@ -20,19 +20,27 @@
 package com.spotify.dataenum.processor.data;
 
 import com.spotify.dataenum.processor.util.Iterables;
+import javax.annotation.Nullable;
 
 /** Represents one of the possible values of a dataenum spec. */
 public class Value {
   private final String simpleName;
+  @Nullable private final String javadoc;
   private final Iterable<Parameter> parameters;
 
-  public Value(String simpleName, Iterable<Parameter> parameters) {
+  public Value(String simpleName, String javadoc, Iterable<Parameter> parameters) {
     this.simpleName = simpleName;
+    this.javadoc = javadoc;
     this.parameters = parameters;
   }
 
   public String name() {
     return simpleName;
+  }
+
+  @Nullable
+  public String javadoc() {
+    return javadoc;
   }
 
   public Iterable<Parameter> parameters() {

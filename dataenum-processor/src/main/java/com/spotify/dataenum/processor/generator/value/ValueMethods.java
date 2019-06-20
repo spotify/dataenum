@@ -46,6 +46,16 @@ public class ValueMethods {
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(spec.parameterizedOutputClass());
 
+    if (value.javadoc() != null) {
+      factory.addJavadoc(value.javadoc() + "\n\n");
+    }
+
+    factory.addJavadoc(
+        "@return a {@link $T} (see {@link $T#$L} for source)\n",
+        value.outputClass(),
+        spec.specClass(),
+        value.name());
+
     StringBuilder newString = new StringBuilder();
     List<Object> newArgs = new ArrayList<>();
 

@@ -24,21 +24,25 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import javax.annotation.Nullable;
 
 /** Output-version of value. Contains derived information that wasn't available during parsing. */
 public class OutputValue {
   private final ClassName outputClass;
   private final Iterable<TypeVariableName> typeVariables;
   private final String name;
+  @Nullable private final String javadoc;
   private final Iterable<Parameter> parameters;
 
   public OutputValue(
       ClassName outputClass,
       String name,
+      String javadoc,
       Iterable<Parameter> parameters,
       Iterable<TypeVariableName> typeVariables) {
     this.outputClass = outputClass;
     this.name = name;
+    this.javadoc = javadoc;
     this.parameters = parameters;
     this.typeVariables = typeVariables;
   }
@@ -66,6 +70,11 @@ public class OutputValue {
 
   public String name() {
     return name;
+  }
+
+  @Nullable
+  public String javadoc() {
+    return javadoc;
   }
 
   public Iterable<Parameter> parameters() {

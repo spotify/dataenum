@@ -70,7 +70,7 @@ public final class SpecTypeFactory {
     TypeSpec.Builder enumBuilder =
         TypeSpec.classBuilder(spec.outputClass())
             .addOriginatingElement(element)
-            .addJavadoc("Generated from {@link $T}", spec.specClass())
+            .addJavadoc("Generated from {@link $T}\n", spec.specClass())
             .addAnnotation(
                 AnnotationSpec.builder(Generated.class)
                     .addMember(
