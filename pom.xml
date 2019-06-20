@@ -127,7 +127,7 @@
                 <plugin>
                     <groupId>com.github.siom79.japicmp</groupId>
                     <artifactId>japicmp-maven-plugin</artifactId>
-                    <version>0.11.0</version>
+                    <version>0.14.1</version>
                     <configuration>
                         <oldVersion>
                             <dependency>
@@ -159,14 +159,14 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>3.1.3.1</version>
+                    <version>3.1.12</version>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
             </plugin>
             <plugin>
                 <groupId>com.mycila</groupId>
@@ -202,7 +202,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.7.9</version>
+                        <version>0.8.4</version>
                         <configuration>
                             <excludes>
                                 <exclude>**/AutoValue_*</exclude>

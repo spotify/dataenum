@@ -98,8 +98,14 @@ final class ValueParser {
       parameters.add(new Parameter(parameterName, parameterType, nullable, redacted, isEnum));
     }
 
+    String javadoc = processingEnv.getElementUtils().getDocComment(element);
+
+    if (javadoc != null) {
+      javadoc = javadoc.trim();
+    }
+
     String valueSimpleName = methodElement.getSimpleName().toString();
-    return new Value(valueSimpleName, parameters);
+    return new Value(valueSimpleName, javadoc, parameters);
   }
 
   private static boolean isAnnotationPresent(
