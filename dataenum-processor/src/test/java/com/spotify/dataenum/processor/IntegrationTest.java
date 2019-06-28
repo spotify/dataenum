@@ -274,4 +274,9 @@ public class IntegrationTest {
                 + "   * @return a {@link Documented} (see {@link Javadoc_dataenum#Documented} for source)\n"
                 + "   */\n");
   }
+
+  @Test
+  public void shouldCopyAnnotationsFromCaseSourceToFactoryMethod() {
+    assertThatEnumGeneratedMatchingFile("annotation/Annotation", "annotation/MyAnnotation.java");
+  }
 }

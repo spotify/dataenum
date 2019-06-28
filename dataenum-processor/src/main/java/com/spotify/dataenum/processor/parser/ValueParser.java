@@ -23,12 +23,17 @@ import com.spotify.dataenum.dataenum_case;
 import com.spotify.dataenum.function.Function;
 import com.spotify.dataenum.processor.data.Parameter;
 import com.spotify.dataenum.processor.data.Value;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.AnnotationSpec.Builder;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -37,6 +42,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.Diagnostic.Kind;
 
 final class ValueParser {
 
@@ -105,7 +111,39 @@ final class ValueParser {
     }
 
     String valueSimpleName = methodElement.getSimpleName().toString();
-    return new Value(valueSimpleName, javadoc, parameters);
+    return new Value(
+        valueSimpleName, javadoc, parameters, parseMethodAnnotations(methodElement, messager));
+  }
+
+  private static Iterable<AnnotationSpec> parseMethodAnnotations(
+      ExecutableElement methodElement, Messager messager) {
+    ArrayList<AnnotationSpec> annotations = new ArrayList<>();
+
+    for (AnnotationMirror annotationMirror : methodElement.getAnnotationMirrors()) {
+      TypeName annotationTypeName =
+          ClassName.get(annotationMirror.getAnnotationType().asElement().asType());
+
+      if (!(annotationTypeName instanceof ClassName)) {
+        messager.printMessage(
+            Kind.ERROR,
+            "Annotation is not a class; this shouldn't happen",
+            methodElement,
+            annotationMirror);
+        continue;
+      }
+
+      Builder builder = AnnotationSpec.builder(((ClassName) annotationTypeName));
+
+      for (Entry<? extends ExecutableElement, ? extends AnnotationValue> entry :
+          annotationMirror.getElementValues().entrySet()) {
+
+        builder.addMember(entry.getKey().getSimpleName().toString(), entry.getValue().toString());
+      }
+
+      annotations.add(builder.build());
+    }
+
+    return annotations;
   }
 
   private static boolean isAnnotationPresent(
