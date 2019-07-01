@@ -20,6 +20,7 @@
 package com.spotify.dataenum.processor.data;
 
 import com.spotify.dataenum.processor.util.Iterables;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
@@ -33,18 +34,21 @@ public class OutputValue {
   private final String name;
   @Nullable private final String javadoc;
   private final Iterable<Parameter> parameters;
+  private final Iterable<AnnotationSpec> annotations;
 
   public OutputValue(
       ClassName outputClass,
       String name,
       String javadoc,
       Iterable<Parameter> parameters,
-      Iterable<TypeVariableName> typeVariables) {
+      Iterable<TypeVariableName> typeVariables,
+      Iterable<AnnotationSpec> annotations) {
     this.outputClass = outputClass;
     this.name = name;
     this.javadoc = javadoc;
     this.parameters = parameters;
     this.typeVariables = typeVariables;
+    this.annotations = annotations;
   }
 
   public ClassName outputClass() {
@@ -83,5 +87,9 @@ public class OutputValue {
 
   public boolean hasParameters() {
     return !Iterables.isEmpty(parameters());
+  }
+
+  public Iterable<AnnotationSpec> annotations() {
+    return annotations;
   }
 }

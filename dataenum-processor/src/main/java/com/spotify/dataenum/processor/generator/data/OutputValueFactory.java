@@ -51,7 +51,8 @@ final class OutputValueFactory {
       parameters.add(parameterWithoutDataEnumSuffix(parameter));
     }
 
-    return new OutputValue(outputClass, value.name(), value.javadoc(), parameters, typeVariables);
+    return new OutputValue(
+        outputClass, value.name(), value.javadoc(), parameters, typeVariables, value.annotations());
   }
 
   private static Parameter parameterWithoutDataEnumSuffix(Parameter parameter)

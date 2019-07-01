@@ -20,6 +20,7 @@
 package com.spotify.dataenum.processor.data;
 
 import com.spotify.dataenum.processor.util.Iterables;
+import com.squareup.javapoet.AnnotationSpec;
 import javax.annotation.Nullable;
 
 /** Represents one of the possible values of a dataenum spec. */
@@ -27,11 +28,17 @@ public class Value {
   private final String simpleName;
   @Nullable private final String javadoc;
   private final Iterable<Parameter> parameters;
+  private final Iterable<AnnotationSpec> annotations;
 
-  public Value(String simpleName, String javadoc, Iterable<Parameter> parameters) {
+  public Value(
+      String simpleName,
+      String javadoc,
+      Iterable<Parameter> parameters,
+      Iterable<AnnotationSpec> annotations) {
     this.simpleName = simpleName;
     this.javadoc = javadoc;
     this.parameters = parameters;
+    this.annotations = annotations;
   }
 
   public String name() {
@@ -49,5 +56,9 @@ public class Value {
 
   public boolean hasParameters() {
     return !Iterables.isEmpty(parameters());
+  }
+
+  public Iterable<AnnotationSpec> annotations() {
+    return annotations;
   }
 }

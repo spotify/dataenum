@@ -22,6 +22,7 @@ package com.spotify.dataenum.processor.generator.value;
 import com.spotify.dataenum.processor.data.OutputSpec;
 import com.spotify.dataenum.processor.data.OutputValue;
 import com.spotify.dataenum.processor.data.Parameter;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.ParameterSpec;
@@ -55,6 +56,10 @@ public class ValueMethods {
         value.outputClass(),
         spec.specClass(),
         value.name());
+
+    for (AnnotationSpec annotationSpec : value.annotations()) {
+      factory.addAnnotation(annotationSpec);
+    }
 
     StringBuilder newString = new StringBuilder();
     List<Object> newArgs = new ArrayList<>();
