@@ -28,4 +28,7 @@ interface Annotation_dataenum {
   @Deprecated
   @MyAnnotation(foo = "hi", fie = 15)
   dataenum_case AnnotatedWithParams();
+
+  @MyAnnotation(foo = "hi")
+  dataenum_case AnnotatedWithDefault();
 }

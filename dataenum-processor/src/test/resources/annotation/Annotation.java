@@ -41,17 +41,32 @@ public abstract class Annotation {
     return new AnnotatedWithParams();
   }
 
+  @MyAnnotation(foo = "hi")
+  public static Annotation annotatedWithDefault() {
+    return new AnnotatedWithDefault();
+  }
+
   public final boolean isAnnotatedWithParams() {
     return (this instanceof AnnotatedWithParams);
+  }
+
+  public final boolean isAnnotatedWithDefault() {
+    return (this instanceof AnnotatedWithDefault);
   }
 
   public final AnnotatedWithParams asAnnotatedWithParams() {
     return (AnnotatedWithParams) this;
   }
 
-  public abstract void match(@Nonnull Consumer<AnnotatedWithParams> annotatedWithParams);
+  public final AnnotatedWithDefault asAnnotatedWithDefault() {
+    return (AnnotatedWithDefault) this;
+  }
 
-  public abstract <R_> R_ map(@Nonnull Function<AnnotatedWithParams, R_> annotatedWithParams);
+  public abstract void match(@Nonnull Consumer<AnnotatedWithParams> annotatedWithParams,
+      @Nonnull Consumer<AnnotatedWithDefault> annotatedWithDefault);
+
+  public abstract <R_> R_ map(@Nonnull Function<AnnotatedWithParams, R_> annotatedWithParams,
+      @Nonnull Function<AnnotatedWithDefault, R_> annotatedWithDefault);
 
   public static final class AnnotatedWithParams extends Annotation {
     AnnotatedWithParams() {
@@ -73,13 +88,47 @@ public abstract class Annotation {
     }
 
     @Override
-    public final void match(@Nonnull Consumer<AnnotatedWithParams> annotatedWithParams) {
+    public final void match(@Nonnull Consumer<AnnotatedWithParams> annotatedWithParams,
+        @Nonnull Consumer<AnnotatedWithDefault> annotatedWithDefault) {
       annotatedWithParams.accept(this);
     }
 
     @Override
-    public final <R_> R_ map(@Nonnull Function<AnnotatedWithParams, R_> annotatedWithParams) {
+    public final <R_> R_ map(@Nonnull Function<AnnotatedWithParams, R_> annotatedWithParams,
+        @Nonnull Function<AnnotatedWithDefault, R_> annotatedWithDefault) {
       return annotatedWithParams.apply(this);
+    }
+  }
+
+  public static final class AnnotatedWithDefault extends Annotation {
+    AnnotatedWithDefault() {
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      return other instanceof AnnotatedWithDefault;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    public String toString() {
+      return "AnnotatedWithDefault{}";
+    }
+
+    @Override
+    public final void match(@Nonnull Consumer<AnnotatedWithParams> annotatedWithParams,
+        @Nonnull Consumer<AnnotatedWithDefault> annotatedWithDefault) {
+      annotatedWithDefault.accept(this);
+    }
+
+    @Override
+    public final <R_> R_ map(@Nonnull Function<AnnotatedWithParams, R_> annotatedWithParams,
+        @Nonnull Function<AnnotatedWithDefault, R_> annotatedWithDefault) {
+      return annotatedWithDefault.apply(this);
     }
   }
 }

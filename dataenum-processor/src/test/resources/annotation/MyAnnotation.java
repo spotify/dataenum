@@ -29,5 +29,5 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface MyAnnotation {
   String foo();
-  int fie();
+  int fie() default 99;
 }
