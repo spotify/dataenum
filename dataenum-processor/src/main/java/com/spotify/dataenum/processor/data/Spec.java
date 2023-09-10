@@ -32,12 +32,14 @@ import com.squareup.javapoet.TypeVariableName;
 public class Spec {
   private final ClassName specClass;
   private final Iterable<TypeVariableName> typeVariables;
+  private final Iterable<ClassName> interfaces;
   private final Iterable<Value> values;
 
   public Spec(
-      ClassName specClass, Iterable<TypeVariableName> typeVariables, Iterable<Value> values) {
+          ClassName specClass, Iterable<TypeVariableName> typeVariables, Iterable<ClassName> interfaces, Iterable<Value> values) {
     this.specClass = specClass;
     this.typeVariables = typeVariables;
+    this.interfaces = interfaces;
     this.values = values;
   }
 
@@ -47,6 +49,9 @@ public class Spec {
 
   public Iterable<TypeVariableName> typeVariables() {
     return typeVariables;
+  }
+  public Iterable<ClassName> superInterfaces() {
+    return interfaces;
   }
 
   public boolean hasTypeVariables() {
