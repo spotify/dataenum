@@ -19,8 +19,8 @@
  */
 package com.spotify.dataenum.processor.parser;
 
-import com.spotify.dataenum.dataenum_case;
 import com.spotify.dataenum.function.Function;
+import com.spotify.dataenum.processor.ProcessingContext;
 import com.spotify.dataenum.processor.data.Parameter;
 import com.spotify.dataenum.processor.data.Value;
 import com.squareup.javapoet.AnnotationSpec;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import javax.annotation.processing.Messager;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -39,8 +38,6 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.Diagnostic.Kind;
 
@@ -48,29 +45,10 @@ final class ValueParser {
 
   private ValueParser() {}
 
-  static Value parse(Element element, ProcessingEnvironment processingEnv) {
-    Messager messager = processingEnv.getMessager();
-
-    if (element.getKind() != ElementKind.METHOD) {
-      messager.printMessage(
-          Diagnostic.Kind.ERROR,
-          String.format(
-              "Value specs must be methods, found %s: %s",
-              element.getKind().toString().toLowerCase(), element),
-          element);
-      return null;
-    }
+  static Value parse(Element element, ProcessingContext ctx) {
+    Messager messager = ctx.env.getMessager();
 
     ExecutableElement methodElement = (ExecutableElement) element;
-    if (!isValueSpecMarker(methodElement.getReturnType(), processingEnv)) {
-      messager.printMessage(
-          Diagnostic.Kind.ERROR,
-          String.format(
-              "Value specs must return dataenum_case, found %s: %s",
-              methodElement.getReturnType(), element),
-          element);
-      return null;
-    }
 
     if (methodElement.getTypeParameters().size() != 0) {
       messager.printMessage(
@@ -96,15 +74,14 @@ final class ValueParser {
 
       boolean nullable = isAnnotationPresent(parameterElement, ValueParser::isNullableAnnotation);
       boolean redacted = isAnnotationPresent(parameterElement, ValueParser::isRedactedAnnotation);
-      Element parameterTypeElement =
-          processingEnv.getTypeUtils().asElement(parameterElement.asType());
+      Element parameterTypeElement = ctx.env.getTypeUtils().asElement(parameterElement.asType());
       boolean isEnum =
           parameterTypeElement != null && parameterTypeElement.getKind() == ElementKind.ENUM;
 
       parameters.add(new Parameter(parameterName, parameterType, nullable, redacted, isEnum));
     }
 
-    String javadoc = processingEnv.getElementUtils().getDocComment(element);
+    String javadoc = ctx.env.getElementUtils().getDocComment(element);
 
     if (javadoc != null) {
       javadoc = javadoc.trim();
@@ -156,13 +133,9 @@ final class ValueParser {
     return false;
   }
 
-  private static boolean isValueSpecMarker(
-      TypeMirror returnType, ProcessingEnvironment processingEnvironment) {
-    Types types = processingEnvironment.getTypeUtils();
-    Elements elements = processingEnvironment.getElementUtils();
+  public static boolean isValueSpecMarker(TypeMirror returnType, ProcessingContext ctx) {
 
-    return types.isSameType(
-        returnType, elements.getTypeElement(dataenum_case.class.getCanonicalName()).asType());
+    return ctx.env.getTypeUtils().isSameType(returnType, ctx.dataenum_class_element);
   }
 
   private static boolean isNullableAnnotation(AnnotationMirror annotation) {
