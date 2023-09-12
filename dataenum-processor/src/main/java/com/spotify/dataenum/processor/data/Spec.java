@@ -36,7 +36,10 @@ public class Spec {
   private final Iterable<Value> values;
 
   public Spec(
-          ClassName specClass, Iterable<TypeVariableName> typeVariables, Iterable<ClassName> interfaces, Iterable<Value> values) {
+      ClassName specClass,
+      Iterable<TypeVariableName> typeVariables,
+      Iterable<ClassName> interfaces,
+      Iterable<Value> values) {
     this.specClass = specClass;
     this.typeVariables = typeVariables;
     this.interfaces = interfaces;
@@ -50,6 +53,7 @@ public class Spec {
   public Iterable<TypeVariableName> typeVariables() {
     return typeVariables;
   }
+
   public Iterable<ClassName> superInterfaces() {
     return interfaces;
   }

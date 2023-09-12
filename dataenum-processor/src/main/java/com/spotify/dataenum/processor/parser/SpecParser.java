@@ -55,7 +55,10 @@ public final class SpecParser {
       typeVariableNames.add(TypeVariableName.get(typeParameterElement));
     }
 
-    List<ClassName> interfaces = dataEnum.getInterfaces().stream().map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement())).collect(Collectors.toList());
+    List<ClassName> interfaces =
+        dataEnum.getInterfaces().stream()
+            .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
+            .collect(Collectors.toList());
 
     List<Value> values = ValuesParser.parse(dataEnum, processingEnv);
     if (values == null) {

@@ -284,5 +284,4 @@ public class IntegrationTest {
   public void superInterfaces() {
     assertThatEnumGeneratedMatchingFile("SuperInterfaces");
   }
-
 }
