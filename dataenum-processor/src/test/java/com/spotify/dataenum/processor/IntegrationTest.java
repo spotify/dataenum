@@ -279,4 +279,9 @@ public class IntegrationTest {
   public void shouldCopyAnnotationsFromCaseSourceToFactoryMethod() {
     assertThatEnumGeneratedMatchingFile("annotation/Annotation", "annotation/MyAnnotation.java");
   }
+
+  @Test
+  public void superInterfaces() {
+    assertThatEnumGeneratedMatchingFile("SuperInterfaces");
+  }
 }
