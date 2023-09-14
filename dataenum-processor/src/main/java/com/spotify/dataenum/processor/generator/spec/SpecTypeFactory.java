@@ -77,7 +77,8 @@ public final class SpecTypeFactory {
                         "value", CodeBlock.of("$S", DataEnumProcessor.class.getCanonicalName()))
                     .build())
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-            .addTypeVariables(spec.typeVariables());
+            .addTypeVariables(spec.typeVariables())
+            .addSuperinterfaces(spec.superInterfaces());
 
     // add constructor with correct access
     enumBuilder.addMethod(

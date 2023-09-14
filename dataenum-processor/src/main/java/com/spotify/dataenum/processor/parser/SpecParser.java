@@ -28,11 +28,13 @@ import com.squareup.javapoet.TypeVariableName;
 import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.type.DeclaredType;
 import javax.tools.Diagnostic;
 
 public final class SpecParser {
@@ -60,7 +62,13 @@ public final class SpecParser {
       return null;
     }
 
+    List<ClassName> interfaces =
+      dataEnum.getInterfaces().stream()
+          .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
+          .collect(Collectors.toList());
+ 
     ClassName enumInterface = ClassName.get(dataEnum);
-    return new Spec(enumInterface, typeVariableNames, valuesAndMethods.fst, valuesAndMethods.snd);
+
+    return new Spec(enumInterface, typeVariableNames, interfaces, valuesAndMethods.fst, valuesAndMethods.snd);
   }
 }

@@ -31,7 +31,7 @@ public class OutputSpec extends Spec {
   private final Iterable<OutputValue> outputValues;
 
   public OutputSpec(Spec input, ClassName outputClass, Iterable<OutputValue> outputValues) {
-    super(input.specClass(), input.typeVariables(), input.values(), input.methods());
+    super(input.specClass(), input.typeVariables(), input.superInterfaces(), input.values(), input.methods());
     this.outputClass = outputClass;
     this.outputValues = outputValues;
   }
