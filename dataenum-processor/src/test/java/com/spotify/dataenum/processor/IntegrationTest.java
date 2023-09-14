@@ -286,7 +286,7 @@ public class IntegrationTest {
   public void methodsAndValuesEnum() throws Exception {
     assertThatEnumGeneratedMatchingFile("MethodsAndValues");
   }
-  
+
   public void superInterfaces() {
     assertThatEnumGeneratedMatchingFile("SuperInterfaces");
   }

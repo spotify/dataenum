@@ -63,12 +63,13 @@ public final class SpecParser {
     }
 
     List<ClassName> interfaces =
-      dataEnum.getInterfaces().stream()
-          .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
-          .collect(Collectors.toList());
- 
+        dataEnum.getInterfaces().stream()
+            .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
+            .collect(Collectors.toList());
+
     ClassName enumInterface = ClassName.get(dataEnum);
 
-    return new Spec(enumInterface, typeVariableNames, interfaces, valuesAndMethods.fst, valuesAndMethods.snd);
+    return new Spec(
+        enumInterface, typeVariableNames, interfaces, valuesAndMethods.fst, valuesAndMethods.snd);
   }
 }

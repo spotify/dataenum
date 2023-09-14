@@ -80,9 +80,7 @@ final class MembersParser {
                               + "Method spec must be marked as `default`, but found (%s) "
                               + "Element: %s",
                           element.getReturnType(),
-                          element
-                              .getModifiers()
-                              .stream()
+                          element.getModifiers().stream()
                               .map(Modifier::toString)
                               .collect(Collectors.joining(", ")),
                           element),
@@ -113,9 +111,7 @@ final class MembersParser {
         ? null
         : new Pair<>(
             values,
-            classified
-                .adtMethods()
-                .stream()
+            classified.adtMethods().stream()
                 .map(x -> MethodParser.parse(x, ctx.trees))
                 .collect(Collectors.toList()));
   }
@@ -137,8 +133,7 @@ final class MembersParser {
           x -> x.getModifiers().contains(Modifier.DEFAULT);
 
       final Map<String, ? extends List<? extends Element>> xs =
-          elements
-              .stream()
+          elements.stream()
               .collect(
                   Collectors.groupingBy(
                       e -> {
@@ -180,9 +175,7 @@ final class MembersParser {
 
     List<ExecutableElement> notSupportedMethods() {
       if (elements.containsKey(NOT_SUPPORTED_METHOD)) {
-        return elements
-            .get(NOT_SUPPORTED_METHOD)
-            .stream()
+        return elements.get(NOT_SUPPORTED_METHOD).stream()
             .map(x -> (ExecutableElement) x)
             .collect(Collectors.toList());
       } else return Collections.emptyList();
@@ -194,9 +187,7 @@ final class MembersParser {
 
     List<ExecutableElement> values() {
       if (elements.containsKey(VALUE)) {
-        return elements
-            .get(VALUE)
-            .stream()
+        return elements.get(VALUE).stream()
             .map(x -> (ExecutableElement) x)
             .collect(Collectors.toList());
       } else return Collections.emptyList();
@@ -208,9 +199,7 @@ final class MembersParser {
 
     List<ExecutableElement> adtMethods() {
       if (elements.containsKey(ADT_METHOD)) {
-        return elements
-            .get(ADT_METHOD)
-            .stream()
+        return elements.get(ADT_METHOD).stream()
             .map(x -> (ExecutableElement) x)
             .collect(Collectors.toList());
       } else return Collections.emptyList();
