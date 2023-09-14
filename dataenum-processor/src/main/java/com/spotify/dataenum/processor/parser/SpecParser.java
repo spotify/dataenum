@@ -19,15 +19,17 @@
  */
 package com.spotify.dataenum.processor.parser;
 
+import com.spotify.dataenum.processor.ProcessingContext;
 import com.spotify.dataenum.processor.data.Spec;
 import com.spotify.dataenum.processor.data.Value;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeVariableName;
+import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.processing.Messager;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
@@ -39,8 +41,8 @@ public final class SpecParser {
 
   private SpecParser() {}
 
-  public static Spec parse(Element element, ProcessingEnvironment processingEnv) {
-    Messager messager = processingEnv.getMessager();
+  public static Spec parse(Element element, ProcessingContext ctx) {
+    Messager messager = ctx.env.getMessager();
 
     if (element.getKind() != ElementKind.INTERFACE) {
       messager.printMessage(
@@ -55,17 +57,19 @@ public final class SpecParser {
       typeVariableNames.add(TypeVariableName.get(typeParameterElement));
     }
 
+    final Pair<List<Value>, List<MethodSpec>> valuesAndMethods = MembersParser.parse(dataEnum, ctx);
+    if (valuesAndMethods == null) {
+      return null;
+    }
+
     List<ClassName> interfaces =
         dataEnum.getInterfaces().stream()
             .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
             .collect(Collectors.toList());
 
-    List<Value> values = ValuesParser.parse(dataEnum, processingEnv);
-    if (values == null) {
-      return null;
-    }
-
     ClassName enumInterface = ClassName.get(dataEnum);
-    return new Spec(enumInterface, typeVariableNames, interfaces, values);
+
+    return new Spec(
+        enumInterface, typeVariableNames, interfaces, valuesAndMethods.fst, valuesAndMethods.snd);
   }
 }

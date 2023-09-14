@@ -96,6 +96,8 @@ public final class SpecTypeFactory {
       enumBuilder.addMethod(mapMethods.createAbstractFoldMethod());
     }
 
+    enumBuilder.addMethods(spec.methods());
+
     return enumBuilder.build();
   }
 }

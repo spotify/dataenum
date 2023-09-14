@@ -33,19 +33,24 @@ import com.spotify.dataenum.processor.parser.SpecParser;
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
+import com.sun.source.util.Trees;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
-import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
 public class DataEnumProcessor extends AbstractProcessor {
+  private Trees trees;
+
+  @Override
+  public synchronized void init(ProcessingEnvironment processingEnv) {
+    super.init(processingEnv);
+    this.trees = Trees.instance(processingEnv);
+  }
 
   @Override
   public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
@@ -58,7 +63,7 @@ public class DataEnumProcessor extends AbstractProcessor {
     for (Element element : roundEnvironment.getElementsAnnotatedWith(DataEnum.class)) {
       try {
 
-        Spec spec = SpecParser.parse(element, processingEnv);
+        Spec spec = SpecParser.parse(element, new ProcessingContext(processingEnv));
         if (spec == null) {
           continue;
         }

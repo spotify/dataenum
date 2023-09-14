@@ -21,6 +21,7 @@ package com.spotify.dataenum.processor.data;
 
 import com.spotify.dataenum.processor.util.Iterables;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeVariableName;
 
 /**
@@ -34,16 +35,19 @@ public class Spec {
   private final Iterable<TypeVariableName> typeVariables;
   private final Iterable<ClassName> interfaces;
   private final Iterable<Value> values;
+  private final Iterable<MethodSpec> methods;
 
   public Spec(
       ClassName specClass,
       Iterable<TypeVariableName> typeVariables,
       Iterable<ClassName> interfaces,
-      Iterable<Value> values) {
+      Iterable<Value> values,
+      Iterable<MethodSpec> methods) {
     this.specClass = specClass;
     this.typeVariables = typeVariables;
     this.interfaces = interfaces;
     this.values = values;
+    this.methods = methods;
   }
 
   public ClassName specClass() {
@@ -64,5 +68,9 @@ public class Spec {
 
   public Iterable<Value> values() {
     return values;
+  }
+
+  public Iterable<MethodSpec> methods() {
+    return methods;
   }
 }

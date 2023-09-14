@@ -186,7 +186,9 @@ public class IntegrationTest {
     assertThat(compilation).failed();
     assertThat(compilation).hadErrorCount(2);
     assertThat(compilation).hadErrorContaining("Value specs must be methods, found interface");
-    assertThat(compilation).hadErrorContaining("Value specs must return dataenum_case, found void");
+    assertThat(compilation)
+        .hadErrorContaining(
+            "Neither Value spec, nor Method spec. Value spec must return dataenum_case, but found (void). Method spec must be marked as `default`, but found (public, abstract) ");
   }
 
   @Test
@@ -281,6 +283,10 @@ public class IntegrationTest {
   }
 
   @Test
+  public void methodsAndValuesEnum() throws Exception {
+    assertThatEnumGeneratedMatchingFile("MethodsAndValues");
+  }
+
   public void superInterfaces() {
     assertThatEnumGeneratedMatchingFile("SuperInterfaces");
   }
