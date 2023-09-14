@@ -70,11 +70,23 @@ public abstract class MethodsAndValues {
 
   public abstract <R_> R_ map(@Nonnull Function<Val1, R_> val1, @Nonnull Function<Val2, R_> val2);
 
-  public String x(MethodsAndValues z) {
-    return z.map((v1)->v1.x(), (v2)->v2.x());}
+  public String classMethodNoExtraArgs(MethodsAndValues x) {
+    return x.map((v1)->v1.x(), (v2)->v2.x());}
 
-  public static int y(MethodsAndValues z) {
-    return z.map((v1)->0, (v2)->1);}
+  public String classMethodSomeExtraArgs(MethodsAndValues x, String suffix) {
+    return x.map((v1)->v1.x() + suffix, (v2)->v2.x() + suffix);}
+
+  public <T> String classMethodTypeParams(MethodsAndValues x, T suffix) {
+    return x.map((v1)->v1.x() + suffix.toString(), (v2)->v2.x() + suffix.toString());}
+
+  public static String staticMethodNoExtraArgs(MethodsAndValues x) {
+    return x.map((v1)->v1.x(), (v2)->v2.x());}
+
+  public static String staticMethodSomeExtraArgs(MethodsAndValues x, String suffix) {
+    return x.map((v1)->v1.x() + suffix, (v2)->v2.x() + suffix);}
+
+  public static <T> String staticMethodTypeParams(MethodsAndValues x, T suffix) {
+    return x.map((v1)->v1.x() + suffix.toString(), (v2)->v2.x() + suffix.toString());}
 
   public static final class Val1 extends MethodsAndValues {
     private final String x;

@@ -17,27 +17,62 @@
  * limitations under the License.
  * -/-/-
  */
+
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.Static;
 import com.spotify.dataenum.dataenum_case;
+
 import java.util.Set;
 
 @DataEnum
 interface MethodsAndValues_dataenum {
-  dataenum_case Val1(String x);
-  dataenum_case Val2(String x);
+    dataenum_case Val1(String x);
 
-  default String x(MethodsAndValues z) {
-    return z.map(
-      v1 -> v1.x(),
-      v2 -> v2.x()
-    );
-  }
+    dataenum_case Val2(String x);
 
-  @Static default int y(MethodsAndValues z) {
-    return z.map(
-      v1 -> 0,
-      v2 -> 1
-    );
-  }
+    default String classMethodNoExtraArgs(MethodsAndValues x) {
+        return x.map(
+                v1 -> v1.x(),
+                v2 -> v2.x()
+        );
+    }
+
+    default String classMethodSomeExtraArgs(MethodsAndValues x, String suffix) {
+        return x.map(
+                v1 -> v1.x() + suffix,
+                v2 -> v2.x() + suffix
+        );
+    }
+
+    default <T> String classMethodTypeParams(MethodsAndValues x, T suffix) {
+        return x.map(
+                v1 -> v1.x() + suffix.toString(),
+                v2 -> v2.x() + suffix.toString()
+        );
+    }
+
+    @Static
+    default String staticMethodNoExtraArgs(MethodsAndValues x) {
+        return x.map(
+                v1 -> v1.x(),
+                v2 -> v2.x()
+        );
+    }
+
+    @Static
+    default String staticMethodSomeExtraArgs(MethodsAndValues x, String suffix) {
+        return x.map(
+                v1 -> v1.x() + suffix,
+                v2 -> v2.x() + suffix
+        );
+    }
+
+    @Static
+    default <T> String staticMethodTypeParams(MethodsAndValues x, T suffix) {
+        return x.map(
+                v1 -> v1.x() + suffix.toString(),
+                v2 -> v2.x() + suffix.toString()
+        );
+    }
+
 }
