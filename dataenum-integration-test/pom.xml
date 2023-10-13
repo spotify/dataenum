@@ -38,7 +38,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.spotify.fmt</groupId>
+        <groupId>com.coveo</groupId>
         <artifactId>fmt-maven-plugin</artifactId>
       </plugin>
       <plugin>
