@@ -2,6 +2,7 @@ Releasing
 ========
 
 1. Ensure you are set up for deploying to Maven Central.
+1. Ensure you're using JDK 8.
 1. Run `mvn release:prepare release:perform` and follow the instructions.
 1. Enter the release version when prompted or press Enter for default (Please double check the version if you do so).
 1. Enter the next development version when prompted or press Enter for default (Please double check the version if you do so).
