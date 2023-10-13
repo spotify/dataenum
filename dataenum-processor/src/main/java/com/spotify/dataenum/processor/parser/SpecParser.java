@@ -63,7 +63,9 @@ public final class SpecParser {
     }
 
     List<ClassName> interfaces =
-        dataEnum.getInterfaces().stream()
+        dataEnum
+            .getInterfaces()
+            .stream()
             .map(x -> ClassName.get((TypeElement) ((DeclaredType) x).asElement()))
             .collect(Collectors.toList());
 

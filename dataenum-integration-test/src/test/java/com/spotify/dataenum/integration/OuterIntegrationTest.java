@@ -17,16 +17,16 @@
  * limitations under the License.
  * -/-/-
  */
-package com.spotify.dataenum.it;
+package com.spotify.dataenum.integration;
 
 import static com.spotify.dataenum.function.Cases.illegal;
 import static com.spotify.dataenum.function.Cases.todo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.spotify.dataenum.it.Testing.RedactedValue;
-import com.spotify.dataenum.it.Testing.Three;
-import com.spotify.dataenum.it.Testing.Two;
+import com.spotify.dataenum.integration.Testing.RedactedValue;
+import com.spotify.dataenum.integration.Testing.Three;
+import com.spotify.dataenum.integration.Testing.Two;
 import org.junit.Before;
 import org.junit.Test;
 

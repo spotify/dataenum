@@ -17,7 +17,7 @@
  * limitations under the License.
  * -/-/-
  */
-package com.spotify.dataenum.it;
+package com.spotify.dataenum.integration;
 
 import com.spotify.dataenum.DataEnum;
 import com.spotify.dataenum.dataenum_case;

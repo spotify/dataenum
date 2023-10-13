@@ -17,7 +17,7 @@
  * limitations under the License.
  * -/-/-
  */
-package com.spotify.dataenum.it;
+package com.spotify.dataenum.integration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
