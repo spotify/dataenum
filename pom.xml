@@ -191,6 +191,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <!-- ensure that javadoc jars are generated and included with the release artifacts -->
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <useReleaseProfile>true</useReleaseProfile>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
